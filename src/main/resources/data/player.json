@@ -2,6 +2,6 @@
   "HumanPlayer": {
     "maxHp": 20,
     "attack": 5,
-    "speed": 5,
+    "speed": 5
   }
 }

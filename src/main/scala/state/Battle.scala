@@ -18,6 +18,9 @@ object Battle extends BasicGameState {
     if (! gc.isPaused) {
       game.update(gc, sbg, delta)
       ui.update(gc, sbg, delta)
+      for(p <- game.playerList) {
+        p.update(delta)
+      }
     }
   }
   val background = images(Background)
@@ -33,6 +36,10 @@ object Battle extends BasicGameState {
       g.setColor(new Color(255, 0, 0, (0.5 * 255).asInstanceOf[Int]))
       g.fillRect(0, 0, Width, Height)
       // images(GameOverID).draw(0,0)
+    }
+
+    for (p <- game.playerList) {
+      p.draw()
     }
   }
 

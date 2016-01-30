@@ -10,7 +10,7 @@ import org.newdawn.slick.{GameContainer, Graphics}
 import org.newdawn.slick.geom.{Rectangle}
 
 import lib.ui.{Drawable}
-import lib.game.GameConfig.{Width}
+import lib.game.GameConfig.{Width,Height}
 import lib.game.GameConfig
 import lib.util.{TickTimer,TimerListener,FireN}
 import lib.math.clamp
@@ -27,9 +27,9 @@ object PlayerID {
     Json.extractor[String].map(Factory.fromString(_))
 }
 
-case object players extends IDMap[PlayerID, PlayerAttributes]("data/players.json")
+case object players extends IDMap[PlayerID, PlayerAttributes]("data/player.json")
 
-class Player(xc: Float, yc: Float, base: PlayerAttributes) extends GameObject(xc, yc) {
+class Player(xc: Float, yc: Float, base: PlayerAttributes, num: Int) extends GameObject(xc, yc) {
   def maxHp = base.maxHp
   var hp: Float = maxHp
   def attack = base.attack
@@ -40,13 +40,30 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes) extends GameObject(xc
   def velocity: (Float, Float) = (1.0f, 1.0f)
 
   val shape = new Rectangle(0,0,width,height)
+  var facingLeft = true
   def mesh = shape
 
   def move(xamt: Float, yamt: Float) = {
-    // super.move(xamt, yamt)
-    // x = clamp(x, 0, Width-width)
-    // y = clamp(y, 0, GameArea.height-height)
+     facingLeft = (xamt < 0)
+     x += xamt
+     y += yamt
+     x = clamp(x, 0, Width-width)
+     y = clamp(y, 0, Height-height)
   }
 
+  val image = num match {
+    case 0 => images(Player1Walk)
+    case 1 => images(Player2Walk)
+    case _ => images(Player1Jetpack)
+  }
+  image.scaleFactor = 0.2f
+
+  def draw() = {
+    image.draw(x,y,facingLeft)
+  }
+
+  def update(delta: Int) = {
+    image.update(delta)
+  }
 
 }

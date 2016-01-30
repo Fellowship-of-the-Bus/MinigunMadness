@@ -10,21 +10,21 @@ import lib.util.{TickTimer,TimerListener,RepeatForever}
 
 class Game extends lib.game.Game with TimerListener {
   val maxPlayers = 4
-  val players = new Array[Player](maxPlayers)
+  val playerList = new Array[Player](maxPlayers)
   for (i <- 0 until maxPlayers) {
-    
+    playerList(i) = new Player(i*100, i*100, players(HumanPlayer), i)
   }
 
   def setPlayers(nplayers: Int) = {
     for (i <- nplayers until maxPlayers) {
-      players(i).inactivate
+      playerList(i).inactivate
     }
   }
 
   addTimer(new TickTimer(240, cleanup _, RepeatForever))
 
   //var projectiles = List[Projectile]()
-  
+
   def cleanup() = {
     //projectiles = projectiles.filter(_.active)
   }
