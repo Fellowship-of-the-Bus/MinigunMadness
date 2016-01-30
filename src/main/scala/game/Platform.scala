@@ -107,8 +107,8 @@ abstract class Platform(xc: Int, yc: Int, var rotation: Int) extends GameObject(
   }
 }
 
-class PlatformI(xc: Int, yc: Int, rotation: Int) extends Platform(xc, yc, rotation) {
-  
+class PlatformI(xc: Int, yc: Int, rot: Int) extends Platform(xc, yc, rot) {
+
   addMeshPoint(1, 2)
   addMeshPoint(4, 2)
   addMeshPoint(4, 3)
