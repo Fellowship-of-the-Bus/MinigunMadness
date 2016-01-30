@@ -4,7 +4,6 @@ package game
 
 import lib.game.{IDMap, IDFactory}
 import rapture.json._
-// import rapture.json.jsonBackends.jackson._
 
 import org.newdawn.slick.{GameContainer, Graphics}
 import org.newdawn.slick.geom.{Rectangle}
