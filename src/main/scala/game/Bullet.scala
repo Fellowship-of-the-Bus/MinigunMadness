@@ -17,13 +17,13 @@ class Bullet(xc: Float, yc: Float, angle: Float, var playerNum: Int) extends Gam
   val speed = 15f
   val xVel = (speed * math.cos(rad).toFloat)
   val yVel = speed * math.sin(rad).toFloat
-  
+
   val width = 20f // To do: base width on game size
   val height = width * 0.25f
 
   val velocity: (Float, Float) = (xVel, yVel)
 
-  val image = images(Bullet);
+  val image = images(Bullet).copy;
   image.setCenterOfRotation(width/2, height/2)
   image.setRotation(-angle+180)
 
@@ -34,7 +34,7 @@ class Bullet(xc: Float, yc: Float, angle: Float, var playerNum: Int) extends Gam
     // Check Collsion
     // If collides with player (with number != playerNum): deal damage and deactivate
     // If collides with platform/Edge of map: deactivate
-    // Else: 
+    // Else:
     if (x < 0 || x > GameConfig.Width || y < 0 || y > GameConfig.Height) {
       inactivate
     }
