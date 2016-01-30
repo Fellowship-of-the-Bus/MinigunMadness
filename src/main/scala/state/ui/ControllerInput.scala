@@ -161,6 +161,9 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
       // pause/unpause
       case Input.KEY_P => gc.setPaused(!gc.isPaused)
 
+      //shoot
+      case Input.KEY_SPACE => g.bulletList = g.playerList(0).shoot()::g.bulletList
+
       case _ => ()
     }
 

@@ -26,6 +26,9 @@ object Battle extends BasicGameState {
       for(p <- game.playerList) {
         p.update(delta)
       }
+      for(bullet <- game.bulletList) {
+        bullet.move()
+      }
     }
   }
   val background = images(Background)
@@ -43,6 +46,9 @@ object Battle extends BasicGameState {
     }
     for (platform <- game.platformList) {
       platform.draw()
+    }
+    for(bullet <- game.bulletList) {
+        bullet.draw()
     }
   }
 

@@ -14,6 +14,8 @@ class Game extends lib.game.Game with TimerListener {
   var playerList: Array[Player] = null
 
   var platformList: List[Platform] = List()
+  var bulletList: List[Bullet] = List()
+
   platformList = Platform(0,0,TetrisI, 180)::platformList
   platformList = Platform(0, 300, TetrisJ, 270)::platformList
   platformList = Platform(300, 0, TetrisL, 180)::platformList
@@ -33,6 +35,7 @@ class Game extends lib.game.Game with TimerListener {
 
   def cleanup() = {
     //projectiles = projectiles.filter(_.active)
+    bulletList = bulletList.filter(_.active)
   }
 
 

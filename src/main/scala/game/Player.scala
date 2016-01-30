@@ -37,7 +37,7 @@ object PlayerID {
 
 case object players extends IDMap[PlayerID, PlayerAttributes]("data/player.json")
 
-class Player(xc: Float, yc: Float, base: PlayerAttributes, num: Int) extends GameObject(xc, yc) {
+class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends GameObject(xc, yc) {
   val image = num match {
     case 0 => images(Player1Walk)
     case 1 => images(Player2Walk)
@@ -49,6 +49,7 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, num: Int) extends Gam
   var hp: Float = maxHp
   def attack = base.attack
   def speed = base.speed
+  var gunAngle: Float = 45
 
   def maxFuel = base.maxFuel
   var fuel: Float = base.maxFuel
@@ -67,7 +68,7 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, num: Int) extends Gam
   def velocity: (Float, Float) = (speed, speed)
 
   val shape = new Rectangle(0,0,width,height)
-  var facingRight = true
+  def facingRight = (gunAngle <= 90 || gunAngle >= 270)
   def mesh = shape
 
   def move(xamt: Float, yamt: Float) = {
@@ -89,4 +90,7 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, num: Int) extends Gam
     image.update(delta)
   }
 
+  def shoot() = {
+    new Bullet(x + width/2, y + height/2, gunAngle, num)
+  }
 }
