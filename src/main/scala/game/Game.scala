@@ -10,14 +10,14 @@ import lib.util.{TickTimer,TimerListener,RepeatForever}
 
 class Game extends lib.game.Game with TimerListener {
   val maxPlayers = 4
-  //val players = new Array[Player](maxPlayers)
+  val players = new Array[Player](maxPlayers)
   for (i <- 0 until maxPlayers) {
     
   }
 
   def setPlayers(nplayers: Int) = {
     for (i <- nplayers until maxPlayers) {
-      //players(i).inactivate
+      players(i).inactivate
     }
   }
 
