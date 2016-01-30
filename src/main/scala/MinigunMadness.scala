@@ -8,6 +8,7 @@ import state._
 // import game._
 import lib.util.Native
 import lib.game.GameConfig
+import state.ui.ControllerInput
 
 class MinigunMadness(gamename: String) extends StateBasedGame(gamename) {
   def initStatesList(gc: GameContainer) = {
@@ -15,6 +16,7 @@ class MinigunMadness(gamename: String) extends StateBasedGame(gamename) {
     addState(Menu)
     // addState(Battle)
     // addState(Options)
+    val controllerInput = new ControllerInput(gc,this)
   }
 }
 
@@ -39,4 +41,6 @@ object MinigunMadness extends App {
       println("Library path is: " + System.getProperty("java.library.path"))
       t.printStackTrace
   }
+
+
 }
