@@ -23,14 +23,15 @@ object MinigunMadness extends App {
   GameConfig.FrameRate = 60
 
   val HeightPercent = 0.9
-  val AspectRatio = 5/4
+  val AspectRatio = 5.0f/4.0f
 
   try {
     import GameConfig._
     Native.loadLibraryFromJar()
     val appgc = new AppGameContainer(new MinigunMadness("Minigun Madness"))
     Height = (appgc.getScreenHeight * HeightPercent).toInt
-    Width = Height * AspectRatio
+    Width = (Height * AspectRatio).toInt
+    println(s"$Width, $Height")
     appgc.setDisplayMode(Width, Height, false)
     appgc.setTargetFrameRate(FrameRate)
     appgc.setVSync(true)

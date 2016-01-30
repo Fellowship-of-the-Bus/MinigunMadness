@@ -7,6 +7,7 @@ import rapture.json._
 // import rapture.json.jsonBackends.jackson._
 
 import org.newdawn.slick.{GameContainer, Graphics}
+import org.newdawn.slick.geom.{Rectangle}
 
 import lib.ui.{Drawable}
 import lib.game.GameConfig.{Width}
@@ -38,6 +39,8 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes) extends GameObject(xc
   def width = 1.0f
   def velocity: (Float, Float) = (1.0f, 1.0f)
 
+  val shape = new Rectangle(0,0,width,height)
+  def mesh = shape
 
   def move(xamt: Float, yamt: Float) = {
     // super.move(xamt, yamt)
