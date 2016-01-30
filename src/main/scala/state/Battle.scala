@@ -14,6 +14,8 @@ object Battle extends BasicGameState {
 
   val ui = new Pane(0, 0, Width, Height)(Color.white)
 
+  var controllerInput: ControllerInput = null
+
   def update(gc: GameContainer, sbg: StateBasedGame, delta: Int) = {
     if (! gc.isPaused) {
       game.update(gc, sbg, delta)
@@ -22,8 +24,14 @@ object Battle extends BasicGameState {
         p.update(delta)
       }
     }
+    if (! gc.isPaused) {
+      if (controllerInput != null) {
+        controllerInput.update();
+      }
+    }
   }
   val background = images(Background)
+  val platform = Platform(450,450,TetrisT,0)
   def render(gc: GameContainer, sbg: StateBasedGame, g: Graphics) = {
     ui.render(gc, sbg, g)
     background.draw(0,0,Width,Height)
@@ -41,6 +49,7 @@ object Battle extends BasicGameState {
     for (p <- game.playerList) {
       p.draw()
     }
+    platform.draw(g)
   }
 
   def init(gc: GameContainer, sbg: StateBasedGame) = {
@@ -48,7 +57,7 @@ object Battle extends BasicGameState {
     ui.setState(getID)
     ui.resetGame(game)
     ui.init(gc, sbg)
-    val controllerInput = new ControllerInput(game, gc, sbg)
+    controllerInput = new ControllerInput(game, gc, sbg)
   }
 
   def getID() = Mode.BattleID

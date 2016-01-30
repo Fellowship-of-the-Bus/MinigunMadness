@@ -40,11 +40,10 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, num: Int) extends Gam
   def velocity: (Float, Float) = (1.0f, 1.0f)
 
   val shape = new Rectangle(0,0,width,height)
-  var facingLeft = true
+  var facingRight = true
   def mesh = shape
 
   def move(xamt: Float, yamt: Float) = {
-     facingLeft = (xamt < 0)
      x += xamt
      y += yamt
      x = clamp(x, 0, Width-width)
@@ -56,10 +55,10 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, num: Int) extends Gam
     case 1 => images(Player2Walk)
     case _ => images(Player1Jetpack)
   }
-  image.scaleFactor = 0.2f
+  image.scaleFactor = Width/20000.0f
 
   def draw() = {
-    image.draw(x,y,facingLeft)
+    image.draw(x,y,facingRight)
   }
 
   def update(delta: Int) = {
