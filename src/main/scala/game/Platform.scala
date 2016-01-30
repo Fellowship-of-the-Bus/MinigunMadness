@@ -25,8 +25,16 @@ case object TetrisJ extends platformType
 object Platform {
   def apply(xc: Int, yc: Int, shape: platformType, rotation: Int) = {
     var platform = shape match {
-      case TetrisI => new PlatformI(xc, yc, rotation)
-      case _ => new PlatformI(xc, yc, rotation)
+      case TetrisI => 
+        new PlatformI(xc, yc, rotation)
+      case TetrisJ => 
+        new PlatformJ(xc, yc, rotation)
+      case TetrisL =>
+        new PlatformL(xc, yc, rotation)
+      case TetrisT =>
+        new PlatformT(xc, yc, rotation)
+      case _ => 
+        new PlatformI(xc, yc, rotation)
     }
     platform
   }
@@ -119,6 +127,54 @@ class PlatformI(xc: Int, yc: Int, rot: Int) extends Platform(xc, yc, rot) {
 
   val regionImage = images(IBlock).copy()
   override def image = regionImage
+}
 
+class PlatformJ(xc: Int, yc: Int, rotation: Int) extends Platform(xc, yc, rotation) {
+  
+  addMeshPoint(1, 2)
+  addMeshPoint(2, 2)
+  addMeshPoint(2, 3)
+  addMeshPoint(4, 3)
+  addMeshPoint(4, 4)
+  addMeshPoint(1, 4)
 
+  val finalMesh = initialMesh.transform(Transform.createRotateTransform((rotation*Pi).toFloat/180.0f, width/2, height/2))
+  override def mesh = finalMesh
+
+  val regionImage = images(JBlock).copy()
+  override def image = regionImage
+}
+
+class PlatformL(xc: Int, yc: Int, rotation: Int) extends Platform(xc, yc, rotation) {
+  
+  addMeshPoint(1, 3)
+  addMeshPoint(3, 3)
+  addMeshPoint(3, 2)
+  addMeshPoint(4, 2)
+  addMeshPoint(4, 4)
+  addMeshPoint(1, 4)
+
+  val finalMesh = initialMesh.transform(Transform.createRotateTransform((rotation*Pi).toFloat/180.0f, width/2, height/2))
+  override def mesh = finalMesh
+
+  val regionImage = images(LBlock).copy()
+  override def image = regionImage
+}
+
+class PlatformT(xc: Int, yc: Int, rotation: Int) extends Platform(xc, yc, rotation) {
+  
+  addMeshPoint(2, 1)
+  addMeshPoint(3, 1)
+  addMeshPoint(3, 3)
+  addMeshPoint(4, 3)
+  addMeshPoint(4, 4)
+  addMeshPoint(1, 4)
+  addMeshPoint(1, 3)
+  addMeshPoint(2, 3)
+
+  val finalMesh = initialMesh.transform(Transform.createRotateTransform((rotation*Pi).toFloat/180.0f, width/2, height/2))
+  override def mesh = finalMesh
+
+  val regionImage = images(TBlock).copy()
+  override def image = regionImage
 }
