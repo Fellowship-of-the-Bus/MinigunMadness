@@ -17,7 +17,15 @@ import lib.math.clamp
 
 sealed trait PlayerID
 case object HumanPlayer extends PlayerID
-case class PlayerAttributes(maxHp: Float, attack: Float, speed: Float)
+case class PlayerAttributes(
+  maxHp: Float,
+  attack: Float,
+  speed: Float,
+  maxFuel: Float,
+  jetpackSpeed: Float,
+  fuelConsumption: Float,
+  fuelRecovery: Float
+)
 
 object PlayerID {
   implicit object Factory extends IDFactory[PlayerID] {
@@ -42,6 +50,11 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, num: Int) extends Gam
   def attack = base.attack
   def speed = base.speed
 
+  def maxFuel = base.maxFuel
+  var fuel: Float = base.maxFuel
+  def jetpackSpeed = base.jetpackSpeed
+  var jetpackOn = false
+
   lazy val height = image.getHeight
   lazy val width = image.getWidth
   def velocity: (Float, Float) = (speed, speed)
@@ -62,6 +75,12 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, num: Int) extends Gam
   }
 
   def update(delta: Int) = {
+    if (jetpackOn) {
+      fuel -= base.fuelConsumption
+    } else {
+      fuel += base.fuelRecovery
+
+    }
     image.update(delta)
   }
 

@@ -98,6 +98,20 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
             game.players(controller).tryAttack2(game)
           }
         }*/
+      } else if (sbg.getCurrentStateID == Mode.BattleID) {
+        if (button == BUTTON_LB) {
+          val player = g.playerList(controller)
+          player.jetpackOn = true
+        }
+      }
+    }
+  }
+
+  override def controllerButtonReleased(controller: Int, button: Int) = {
+    if (sbg.getCurrentStateID == Mode.BattleID) {
+      if (button == BUTTON_LB) {
+        val player = g.playerList(controller)
+        player.jetpackOn = false
       }
     }
   }
