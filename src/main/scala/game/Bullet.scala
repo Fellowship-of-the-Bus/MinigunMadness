@@ -3,7 +3,7 @@ package mgm
 package game
 
 import org.newdawn.slick.{GameContainer, Graphics}
-import org.newdawn.slick.geom.{Rectangle}
+import org.newdawn.slick.geom.{Rectangle, Transform}
 
 import lib.ui.{Drawable}
 import lib.game.GameConfig.{Width,Height}
@@ -23,14 +23,13 @@ class Bullet(xc: Float, yc: Float, angle: Float, var playerNum: Int) extends Gam
 
   val velocity: (Float, Float) = (xVel, yVel)
 
-
   val image = images(Bullet).copy;
   image.setCenterOfRotation(width/2, height/2)
   image.setRotation(-angle+180)
   image.scaleFactor = 0.1f
 
   val shape = new Rectangle(0,0,width,height)
-  def mesh = shape
+  def mesh = shape.transform(Transform.createRotateTransform(-angle+180, width/2, height/2))
 
   override def move() {
     // Check Collsion
