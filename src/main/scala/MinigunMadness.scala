@@ -13,7 +13,7 @@ class MinigunMadness(gamename: String) extends StateBasedGame(gamename) {
   def initStatesList(gc: GameContainer) = {
     gc.setShowFPS(true)
     addState(Menu)
-    // addState(Battle)
+    addState(Battle)
     // addState(Options)
   }
 }

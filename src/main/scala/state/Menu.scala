@@ -46,7 +46,6 @@ object Menu extends BasicGameState {
     input = gc.getInput
     SBGame = game
     gc.getGraphics.setBackground(Color.cyan)
-    val controllerInput = new ControllerInput(gc,game)
   }
 
   def getID() = Mode.MenuID

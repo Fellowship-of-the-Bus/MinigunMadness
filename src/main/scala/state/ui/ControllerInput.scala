@@ -7,7 +7,7 @@ import org.newdawn.slick.{GameContainer, Graphics, Color, Input}
 import org.newdawn.slick.state.{StateBasedGame}
 import org.newdawn.slick.util.InputAdapter
 
-class ControllerInput(/*g: game.Game, */gc: GameContainer, sbg: StateBasedGame) extends InputAdapter() {
+class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) extends InputAdapter() {
   var input : Input = gc.getInput
   //val game = g
 
