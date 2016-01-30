@@ -6,6 +6,9 @@ import lib.ui.{Button, ToggleButton}
 import lib.game.GameConfig
 import lib.game.GameConfig.{Width,Height}
 
+import state.ui.ControllerInput
+
+
 import org.newdawn.slick.{GameContainer, Graphics, Color, Input, KeyListener}
 import org.newdawn.slick.state.{BasicGameState, StateBasedGame}
 
@@ -43,6 +46,7 @@ object Menu extends BasicGameState {
     input = gc.getInput
     SBGame = game
     gc.getGraphics.setBackground(Color.cyan)
+    val controllerInput = new ControllerInput(gc,game)
   }
 
   def getID() = Mode.MenuID
@@ -70,7 +74,6 @@ object Options extends BasicGameState {
   }
 
   def init(gc: GameContainer, game: StateBasedGame) = {
-
   }
 
   def getID() = Mode.OptionsID
