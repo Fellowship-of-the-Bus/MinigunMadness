@@ -29,7 +29,6 @@ object Battle extends BasicGameState {
     }
   }
   val background = images(Background)
-  val platform = Platform(450,450,TetrisT,0)
   def render(gc: GameContainer, sbg: StateBasedGame, g: Graphics) = {
     background.draw(0,0,Width,Height)
     ui.render(gc, sbg, g)

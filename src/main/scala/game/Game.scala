@@ -15,7 +15,7 @@ class Game extends lib.game.Game with TimerListener {
 
   var platformList: List[Platform] = List()
   platformList = Platform(0,0,TetrisI, 180)::platformList
-  platformList = Platform(0, 300, TetrisJ, 180)::platformList
+  platformList = Platform(0, 300, TetrisJ, 270)::platformList
   platformList = Platform(300, 0, TetrisL, 180)::platformList
   platformList = Platform(300, 300, TetrisT, 180)::platformList
 
@@ -58,5 +58,20 @@ class Game extends lib.game.Game with TimerListener {
     for (p <- players; if (p.active)) {
       p.update(delta, this)
     }*/
+  }
+
+  def collision(go: GameObject, dx: Int, dy: Int) = {
+    var minx = dx
+    var miny = dy
+    for (platform <- platformList) {
+      val (vx, vy): (Int, Int) = platform.collision(go, (dx, dy))
+      if (abs(vx) < abs(minx)) {
+        minx = vx
+      }
+      if (abs(vy) < abs(miny)) {
+        miny = vy
+      }
+    }
+    (minx, miny)
   }
 }

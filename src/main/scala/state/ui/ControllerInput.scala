@@ -132,25 +132,16 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
         val (xvel, yvel) = p.velocity
         val dx = (xvel * input.getAxisValue(cnum,AXIS_X)).toInt
         val dy = (yvel * input.getAxisValue(cnum,AXIS_Y)).toInt
-        var minx = dx
-        var miny = dy
-        for (platform <- g.platformList) {
-          val (vx, vy): (Int, Int) = platform.collision(g.playerList(pnum), (dx, dy))
-          if (abs(vx) < abs(minx)) {
-            minx = vx
-          }
-          if (abs(vy) < abs(miny)) {
-            miny = vy
-          }
-        }
-        println(s"$minx, $miny")
-        g.playerList(pnum).move(minx, miny)
+        val (minx,miny) = g.collision(p,dx,dy)
+        p.move(minx, miny)
       }
 
       if (controllers.length == 0) {
         // support single player if there are no controllers attached
         val p = g.playerList(0)
-        p.move(p.speed*horizontal, p.speed*vertical)
+        val (xvel, yvel) = p.velocity
+        val (minx, miny) = g.collision(p,(xvel * horizontal).toInt, (yvel * vertical).toInt)
+        p.move(minx, miny)
       }
     }
   }
