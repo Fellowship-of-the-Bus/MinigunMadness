@@ -10,7 +10,7 @@ import org.newdawn.slick.util.InputAdapter
 //import game.IDMap._
 
 class ControllerInput(/*g: game.Game, */gc: GameContainer, sbg: StateBasedGame) extends InputAdapter() {
-  var input : Input = null
+  var input : Input = gc.getInput
   //val game = g
 
   import lib.game.GameConfig.{OS,MacOS,Windows}
@@ -62,22 +62,20 @@ class ControllerInput(/*g: game.Game, */gc: GameContainer, sbg: StateBasedGame) 
     case MacOS => 10
     case _ => 0
   }
+
   private var controllers: Vector[(Int, Int)] = Vector()
-  override def setInput(in: Input) = {
-    in.addControllerListener(this)
-    input = in
-    val controllerCount = in.getControllerCount()
-    for (i <- 0 until controllerCount) {
-      if (in.getAxisCount(i) >= 2) {
-        controllers = controllers :+ ((i, controllers.length))
-      }
+  input.addControllerListener(this)
+  val controllerCount = input.getControllerCount()
+  for (i <- 0 until controllerCount) {
+    if (input.getAxisCount(i) >= 2) {
+      controllers = controllers :+ ((i, controllers.length))
     }
-    if (controllers.length == 0) {
-      in.addKeyListener(this)
-     // game.setPlayers(1)
-    } else {
-      //game.setPlayers(controllers.length)
-    }
+  }
+  if (controllers.length == 0) {
+    input.addKeyListener(this)
+   // game.setPlayers(1)
+  } else {
+    //game.setPlayers(controllers.length)
   }
 
   override def controllerButtonPressed(controller: Int, button: Int) = {
@@ -178,6 +176,4 @@ class ControllerInput(/*g: game.Game, */gc: GameContainer, sbg: StateBasedGame) 
       case _ => ()
     }
   }
-
-  setInput(gc.getInput)
 }
