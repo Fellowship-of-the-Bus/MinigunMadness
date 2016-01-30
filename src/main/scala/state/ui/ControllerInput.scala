@@ -129,7 +129,9 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
     if (!gc.isPaused) {
       for ((cnum,pnum) <- controllers) {
         val p = g.playerList(pnum)
-        val (xvel, yvel) = p.velocity
+        val (xvel, yvel) =
+          if (p.jetpackOn) p.jetpackVelocity
+          else p.velocity
         val dx = (xvel * input.getAxisValue(cnum,AXIS_X)).toInt
         val dy = (yvel * input.getAxisValue(cnum,AXIS_Y)).toInt
         val (minx,miny) = g.collision(p,dx,dy)

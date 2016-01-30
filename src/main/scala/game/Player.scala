@@ -54,6 +54,13 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, num: Int) extends Gam
   var fuel: Float = base.maxFuel
   def jetpackSpeed = base.jetpackSpeed
   var jetpackOn = false
+  def jetpackVelocity: (Float, Float) = {
+    if (fuel > 0) {
+      (jetpackSpeed, jetpackSpeed)
+    } else {
+      velocity
+    }
+  }
 
   lazy val height = image.getHeight
   lazy val width = image.getWidth
@@ -75,12 +82,10 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, num: Int) extends Gam
   }
 
   def update(delta: Int) = {
-    if (jetpackOn) {
-      fuel -= base.fuelConsumption
-    } else {
-      fuel += base.fuelRecovery
-
-    }
+    val amt =
+      if (jetpackOn) -base.fuelConsumption
+      else base.fuelRecovery
+    fuel = clamp(fuel+amt, 0, maxFuel)
     image.update(delta)
   }
 
