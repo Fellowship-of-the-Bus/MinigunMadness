@@ -35,7 +35,7 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, num: Int) extends Gam
     case 1 => images(Player2Walk)
     case _ => images(Player1Jetpack)
   }
-  image.scaleFactor = 0.1f
+  image.scaleFactor = Width/(25f * 800f)
 
   def maxHp = base.maxHp
   var hp: Float = maxHp
