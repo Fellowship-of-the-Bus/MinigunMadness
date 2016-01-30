@@ -20,9 +20,10 @@ object Battle extends BasicGameState {
       ui.update(gc, sbg, delta)
     }
   }
-
+  val background = images(Background)
   def render(gc: GameContainer, sbg: StateBasedGame, g: Graphics) = {
     ui.render(gc, sbg, g)
+    background.draw(0,0,Width,Height)
 
     val lightBlue = new Color(150,150,255,0)
     g.setBackground(lightBlue)
