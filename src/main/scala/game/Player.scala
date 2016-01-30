@@ -54,7 +54,7 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
   var hp: Int = maxHp.toInt
   def attack = base.attack
   def speed = base.speed
-  var gunAngle: Float = 45
+  var gunAngle: Float = 90
 
   def maxFuel = base.maxFuel
   var fuel: Float = base.maxFuel

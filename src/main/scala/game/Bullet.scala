@@ -2,7 +2,7 @@ package com.github.fellowship_of_the_bus
 package mgm
 package game
 
-import org.newdawn.slick.{GameContainer, Graphics}
+import org.newdawn.slick.{GameContainer, Graphics, Color}
 import org.newdawn.slick.geom.{Rectangle}
 
 import lib.ui.{Drawable}
@@ -18,16 +18,20 @@ class Bullet(xc: Float, yc: Float, angle: Float, var playerNum: Int) extends Gam
   val xVel = (speed * math.cos(rad).toFloat)
   val yVel = speed * math.sin(rad).toFloat
 
-  val width = 20f // To do: base width on game size
-  val height = width * 0.25f
-
   val velocity: (Float, Float) = (xVel, yVel)
 
+  var scaleFactor = 0.1f
 
-  val image = images(Bullet).copy;
+  val width = images(Bullet).width*scaleFactor // To do: base width on game size
+  val height = images(Bullet).height*scaleFactor
+
+
+  val image = images(Bullet).copy
   image.setCenterOfRotation(width/2, height/2)
   image.setRotation(-angle+180)
-  image.scaleFactor = 0.1f
+  image.scaleFactor = scaleFactor
+
+
 
   val shape = new Rectangle(0,0,width,height)
   def mesh = shape
@@ -44,8 +48,23 @@ class Bullet(xc: Float, yc: Float, angle: Float, var playerNum: Int) extends Gam
     y = y + yVel
   }
 
-  def draw() = {
-    if (active)
+  def draw(g:Graphics) = {
+    if (active) {
       image.draw(x, y)
+      var (prevx, prevy): (Float, Float) = (0-1,-1)
+      for (i <- 0 until mesh.getPointCount()) {
+        val px = mesh.getPoint(i)(0)
+        val py = mesh.getPoint(i)(1)
+
+        if (prevx == -1 && prevy == -1) {
+          prevx = px
+          prevy = py
+        } else {
+          g.drawGradientLine(x+prevx, y+prevy, Color.green, x+px, y+py, Color.green)
+          prevx = px
+          prevy = py
+        }
+      }
+    }
   }
 }

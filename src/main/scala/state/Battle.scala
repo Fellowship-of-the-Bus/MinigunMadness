@@ -45,10 +45,10 @@ object Battle extends BasicGameState {
       player.draw()
     }
     for (platform <- game.platformList) {
-      platform.draw()
+      platform.draw(g)
     }
     for(bullet <- game.bulletList) {
-        bullet.draw()
+      bullet.draw(g)
     }
   }
 
