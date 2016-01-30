@@ -99,9 +99,12 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
           }
         }*/
       } else if (sbg.getCurrentStateID == Mode.BattleID) {
+        val player = g.playerList(controller)
         if (button == BUTTON_LB) {
-          val player = g.playerList(controller)
           player.jetpackOn = true
+        }
+        if (button == BUTTON_RB) {
+          player.shooting = true
         }
       }
     }
@@ -109,9 +112,13 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
 
   override def controllerButtonReleased(controller: Int, button: Int) = {
     if (sbg.getCurrentStateID == Mode.BattleID) {
+      val player = g.playerList(controller)
       if (button == BUTTON_LB) {
-        val player = g.playerList(controller)
         player.jetpackOn = false
+      }
+      if (button == BUTTON_RB) {
+
+        player.shooting = false
       }
     }
   }
@@ -125,6 +132,15 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
     case _ => 0
   }
 
+  lazy val RIGHT_AXIS_X = OS match {
+    case MacOS => 2
+    case _ => 3
+  }
+  lazy val RIGHT_AXIS_Y = OS match {
+    case MacOS => 3
+    case _ => 2
+  }
+
   def update() = {
     if (!gc.isPaused) {
       for ((cnum,pnum) <- controllers) {
@@ -136,6 +152,15 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
         val dy = (yvel * input.getAxisValue(cnum,AXIS_Y)).toInt
         val (minx,miny) = g.collision(p,dx,dy)
         p.move(minx, miny)
+
+        val anglex = input.getAxisValue(cnum, RIGHT_AXIS_X)
+        val angley = input.getAxisValue(cnum, RIGHT_AXIS_Y)
+        var angle = toDegrees(atan2(anglex,angley)) - 90
+        if (angle < 0) angle += 360
+        p.gunAngle = angle.toFloat;
+
+        if (p.shooting) g.bulletList = g.playerList(pnum).shoot()::g.bulletList
+
       }
 
       if (controllers.length == 0) {

@@ -63,6 +63,8 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
     }
   }
 
+  var shooting = false
+
   lazy val height = image.getHeight
   lazy val width = image.getWidth
   def velocity: (Float, Float) = (speed, speed)
