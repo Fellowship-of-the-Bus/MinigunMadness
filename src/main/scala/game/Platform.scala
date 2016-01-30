@@ -5,6 +5,7 @@ import java.util.logging.{Level, Logger}
 import org.newdawn.slick.{AppGameContainer, GameContainer, Graphics, SlickException, Color, Input}
 import org.newdawn.slick.state.{BasicGameState, StateBasedGame}
 import org.newdawn.slick.geom.{Polygon, Transform}
+import scala.math.Pi
 
 import lib.util.Native
 import lib.game.GameConfig
@@ -13,28 +14,28 @@ import lib.game.TopLeftCoordinates
 import lib.ui._
 
 trait platformType
-case object tetrisL extends platformType
-case object tetrisT extends platformType
-case object tetrisS extends platformType
-case object tetrisZ extends platformType
-case object tetrisO extends platformType
-case object tetrisI extends platformType
-case object tetrisJ extends platformType
+case object TetrisL extends platformType
+case object TetrisT extends platformType
+case object TetrisS extends platformType
+case object TetrisZ extends platformType
+case object TetrisO extends platformType
+case object TetrisI extends platformType
+case object TetrisJ extends platformType
 
 object Platform {
   def apply(xc: Int, yc: Int, shape: platformType, rotation: Int) = {
     var platform = shape match {
-      case tetrisL => new PlatformL(xc, yc, rotation)
-      case _ => () => ()
+      case TetrisI => new PlatformI(xc, yc, rotation)
+      case _ => new PlatformI(xc, yc, rotation)
     }
     platform
-  } 
+  }
 }
 
 abstract class Platform(xc: Int, yc: Int, var rotation: Int) extends GameObject(xc, yc) {
   // for now
-  def width = 300
-  def height = 300
+  def width = GameConfig.Width/5
+  def height = width
   def velocity = (0,0)
 
   def cellWidth = width/5
@@ -50,7 +51,20 @@ abstract class Platform(xc: Int, yc: Int, var rotation: Int) extends GameObject(
   def draw(g: Graphics) = {
     image.setCenterOfRotation(width/2, height/2)
     image.setRotation(rotation)
-    image.draw(x, y)
+    image.draw(x, y, width, height)
+
+    // var (prevx, prevy): (Float, Float) = (0,0)
+    // for (i <- 0 until mesh.getPointCount()) {
+    //   val px = mesh.getPoint(i)(0)
+    //   val py = mesh.getPoint(i)(1)
+
+    //   if (prevx == 0 && prevy == 0) {
+    //     prevx = px
+    //     prevy = py
+    //   } else {
+    //     g.drawGradientLine(x+prevx, y+prevy, Color.green, x+px, y+py, Color.green)
+    //   }
+    // }
   }
 
   //given a game object + velocity and returns an allowable velocity vector
@@ -93,17 +107,18 @@ abstract class Platform(xc: Int, yc: Int, var rotation: Int) extends GameObject(
   }
 }
 
-class PlatformL(xc: Int, yc: Int, rotation: Int) extends Platform(xc, yc, rotation) {
+class PlatformI(xc: Int, yc: Int, rotation: Int) extends Platform(xc, yc, rotation) {
   
-  addMeshPoint(1, 3)
+  addMeshPoint(1, 2)
+  addMeshPoint(4, 2)
   addMeshPoint(4, 3)
-  addMeshPoint(4, 4)
-  addMeshPoint(1, 4)
-  initialMesh.setLocation(cellWidth, cellHeight)
+  addMeshPoint(1, 3)
 
-  val finalMesh = initialMesh.transform(Transform.createRotateTransform(rotation, width/2, height/2))
+  val finalMesh = initialMesh.transform(Transform.createRotateTransform((rotation*Pi).toFloat/180.0f, width/2, height/2))
   override def mesh = finalMesh
 
-  override def image = images(FotBLogo).copy()
+  val regionImage = images(IBlock).copy()
+  override def image = regionImage
+
 
 }
