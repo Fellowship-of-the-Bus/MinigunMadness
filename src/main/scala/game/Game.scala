@@ -97,11 +97,16 @@ class Game extends lib.game.Game with TimerListener {
     }
     (minx, miny)
   }
+
   def collision(go1: GameObject, go2: GameObject): Boolean = {
+    //translate meshes to actual location
+    val go1Mesh = go1.mesh.transform(Transform.createTranslateTransform(go1.x, go1.y))
+    val go2Mesh = go2.mesh.transform(Transform.createTranslateTransform(go2.x, go2.y))
+    return go1Mesh.contains(go2Mesh)||go2Mesh.contains(go1Mesh)||go1Mesh.intersects(go2Mesh)
     //normalize game object 2
-    val go2NormalizedX = go2.x - go1.x
-    val go2NormalizedY = go2.y - go1.y
-    val go2NormalizedMesh = go2.mesh.transform(Transform.createTranslateTransform(go2NormalizedX, go2NormalizedY))
-    return go1.mesh.intersects(go2NormalizedMesh)
+    // val go2NormalizedX = go2.x - go1.x
+    // val go2NormalizedY = go2.y - go1.y
+    // val go2NormalizedMesh = go2.mesh.transform(Transform.createTranslateTransform(go2NormalizedX, go2NormalizedY))
+    // return go1.mesh.intersects(go2NormalizedMesh)
   }
 }
