@@ -20,7 +20,10 @@ object Battle extends BasicGameState {
       ui.update(gc, sbg, delta)
     }
   }
-
+  val p1 = Platform(50,100,tetris_l,0)
+  val p2 = Platform(50,400,tetris_i,0)
+  val p3 = Platform(400,100,tetris_j,0)
+  val p4 = Platform(400,400,tetris_t,0)
   def render(gc: GameContainer, sbg: StateBasedGame, g: Graphics) = {
     ui.render(gc, sbg, g)
 
@@ -33,6 +36,10 @@ object Battle extends BasicGameState {
       g.fillRect(0, 0, Width, Height)
       // images(GameOverID).draw(0,0)
     }
+    p1.draw(g)
+    p2.draw(g)
+    p3.draw(g)
+    p4.draw(g)
   }
 
   def init(gc: GameContainer, sbg: StateBasedGame) = {

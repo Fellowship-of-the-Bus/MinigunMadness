@@ -20,6 +20,8 @@ case object tetris_o extends platformType
 case object tetris_i extends platformType
 case object tetris_j extends platformType
 
+
+
 object Platform {
   def apply(xc: Int, yc: Int, shape: platformType, rotation: Int) = {
     var platform = new Platform(xc, yc, shape, rotation)
@@ -32,11 +34,17 @@ class Platform(xc: Int, yc: Int, var shape: platformType, var rotation: Int) ext
   def width = 300
   def height = 400
   def velocity = (0,0)
-
+  val ID = shape match {
+      case tetris_i => IBlock
+      case tetris_j => JBlock
+      case tetris_l => LBlock
+      case tetris_t => TBlock
+      case _ => TBlock
+    }
   def draw(g: Graphics) = {
-    var image = Image("img/test.png", 1)
+    var image = images(ID)
     image.setCenterOfRotation(100, 100)
     image.setRotation(rotation)
-    image.draw(400,400)
+    image.draw(x,y)
   }
 }
