@@ -24,7 +24,7 @@ case object TetrisJ extends platformType
 
 object Platform {
   def apply(xc: Int, yc: Int, shape: platformType, rotation: Int) = {
-    var platform = shape match {
+    val platform = shape match {
       case TetrisI => 
         new PlatformI(xc, yc, rotation)
       case TetrisJ => 
@@ -56,7 +56,7 @@ abstract class Platform(xc: Int, yc: Int, var rotation: Int) extends GameObject(
     initialMesh.addPoint(cellWidth*topLeftX, cellHeight*topLeftY)
   }
 
-  def draw(g: Graphics) = {
+  def draw() = {
     image.setCenterOfRotation(width/2, height/2)
     image.setRotation(rotation)
     image.draw(x, y, width, height)
@@ -79,38 +79,44 @@ abstract class Platform(xc: Int, yc: Int, var rotation: Int) extends GameObject(
   def collision(gameObject: GameObject, velocity: (Int, Int)): (Int, Int) = {
     val (dx, dy) = velocity
     // normalize gameObject to this region
-    var (gx, gy) = (gameObject.x - x, gameObject.y - y)
+    val (gx, gy) = (gameObject.x - x, gameObject.y - y)
     // check if moving will will send you in the platform
-    var transform = Transform.createTranslateTransform(gx + dx, gy + dy)
+    val transform = Transform.createTranslateTransform(gx + dx, gy + dy)
     var translatedgMesh = gameObject.mesh.transform(transform)
     //check if full movement is allowable
     if (!mesh.intersects(translatedgMesh)) {
       return (dx, dy)
     }
     // binary search x to see get max x movment
-    var lowerBound = 0
-    var upperBound = 1
+    var lowerBound = 0f
+    var upperBound = 1f
     while (upperBound - lowerBound > 0.1) {
       translatedgMesh = gameObject.mesh.transform(Transform.createTranslateTransform(gx + dx*(lowerBound+upperBound)/2, gy))
       if (mesh.intersects(translatedgMesh)) {
-        upperBound = (lowerBound+upperBound)/2
+        upperBound = (lowerBound+upperBound).toFloat/2f
       } else {
-        lowerBound = (lowerBound+upperBound)/2
+        lowerBound = (lowerBound+upperBound).toFloat/2f
       }
+      println("x loop")
+      println(upperBound)
+      println(lowerBound)
     }
-    val allowabledx = (lowerBound + upperBound)/2
+    val allowabledx = dx*(lowerBound + upperBound)/2
     //binary search to get max y movement
     lowerBound = 0
     upperBound = 1
     while (upperBound - lowerBound > 0.1) {
       translatedgMesh = gameObject.mesh.transform(Transform.createTranslateTransform(gx + allowabledx,  gy + dy*(lowerBound+upperBound)/2))
       if (mesh.intersects(translatedgMesh)) {
-        upperBound = (lowerBound+upperBound)/2
+        upperBound = (lowerBound+upperBound).toFloat/2f
       } else {
-        lowerBound = (lowerBound+upperBound)/2
+        lowerBound = (lowerBound+upperBound).toFloat/2f
       }
+      println("y loop")
+      println(upperBound)
+      println(lowerBound)
     }
-    val allowabledy = (lowerBound + upperBound)/2
+    val allowabledy = dy*(lowerBound + upperBound)/2
     return (allowabledx.toInt, allowabledy.toInt)
   }
 }
@@ -129,7 +135,7 @@ class PlatformI(xc: Int, yc: Int, rot: Int) extends Platform(xc, yc, rot) {
   override def image = regionImage
 }
 
-class PlatformJ(xc: Int, yc: Int, rotation: Int) extends Platform(xc, yc, rotation) {
+class PlatformJ(xc: Int, yc: Int, rot: Int) extends Platform(xc, yc, rot) {
   
   addMeshPoint(1, 2)
   addMeshPoint(2, 2)
@@ -145,7 +151,7 @@ class PlatformJ(xc: Int, yc: Int, rotation: Int) extends Platform(xc, yc, rotati
   override def image = regionImage
 }
 
-class PlatformL(xc: Int, yc: Int, rotation: Int) extends Platform(xc, yc, rotation) {
+class PlatformL(xc: Int, yc: Int, rot: Int) extends Platform(xc, yc, rot) {
   
   addMeshPoint(1, 3)
   addMeshPoint(3, 3)
@@ -161,7 +167,7 @@ class PlatformL(xc: Int, yc: Int, rotation: Int) extends Platform(xc, yc, rotati
   override def image = regionImage
 }
 
-class PlatformT(xc: Int, yc: Int, rotation: Int) extends Platform(xc, yc, rotation) {
+class PlatformT(xc: Int, yc: Int, rot: Int) extends Platform(xc, yc, rot) {
   
   addMeshPoint(2, 1)
   addMeshPoint(3, 1)

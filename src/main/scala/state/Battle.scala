@@ -20,13 +20,11 @@ object Battle extends BasicGameState {
     if (! gc.isPaused) {
       game.update(gc, sbg, delta)
       ui.update(gc, sbg, delta)
-      for(p <- game.playerList) {
-        p.update(delta)
-      }
-    }
-    if (! gc.isPaused) {
       if (controllerInput != null) {
         controllerInput.update();
+      }
+      for(p <- game.playerList) {
+        p.update(delta)
       }
     }
   }
@@ -45,11 +43,12 @@ object Battle extends BasicGameState {
       g.fillRect(0, 0, Width, Height)
       // images(GameOverID).draw(0,0)
     }
-
-    for (p <- game.playerList) {
-      p.draw()
+    for (player <- game.playerList) {
+      player.draw()
     }
-    platform.draw(g)
+    for (platform <- game.platformList) {
+      platform.draw()
+    }
   }
 
   def init(gc: GameContainer, sbg: StateBasedGame) = {
