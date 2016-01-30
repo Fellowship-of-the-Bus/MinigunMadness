@@ -7,8 +7,6 @@ import org.newdawn.slick.{GameContainer, Graphics, Color, Input}
 import org.newdawn.slick.state.{StateBasedGame}
 import org.newdawn.slick.util.InputAdapter
 
-//import game.IDMap._
-
 class ControllerInput(/*g: game.Game, */gc: GameContainer, sbg: StateBasedGame) extends InputAdapter() {
   var input : Input = gc.getInput
   //val game = g
@@ -73,33 +71,32 @@ class ControllerInput(/*g: game.Game, */gc: GameContainer, sbg: StateBasedGame) 
   }
   if (controllers.length == 0) {
     input.addKeyListener(this)
-   // game.setPlayers(1)
+    //game.setPlayers(1)
   } else {
     //game.setPlayers(controllers.length)
   }
 
   override def controllerButtonPressed(controller: Int, button: Int) = {
-    println(s"Controller ${controller} pressed button ${button}\n")
     if (button == BUTTON_START) {
       gc.setPaused(!gc.isPaused)
     }
     if (!gc.isPaused) {
-      /*if (sbg.getCurrentStateID == Mode.MenuID) {
+      if (sbg.getCurrentStateID == Mode.MenuID) {
         if (button == BUTTON_A) {
           sbg.enterState(Mode.BattleID)
         }
         else if (button == BUTTON_B) {
           System.exit(0)
         }
-      } else {
+      /*} else {
         if (button == BUTTON_A) {
           game.players(controller).tryAttack(game)
         } else if (button == BUTTON_B) {
           if (game.players(controller).imgs.indexOf(game.players(controller).img) != -1) {
             game.players(controller).tryAttack2(game)
           }
-        }
-      }*/
+        }*/
+      }
     }
   }
 
@@ -155,7 +152,7 @@ class ControllerInput(/*g: game.Game, */gc: GameContainer, sbg: StateBasedGame) 
           }
 
         // kick/cancel button
-      *case Input.KEY_S =>
+        case Input.KEY_S =>
           if (sbg.getCurrentStateID == Mode.MenuID) {
             System.exit(0)
           } else if (player.imgs.contains(player.img)) {
