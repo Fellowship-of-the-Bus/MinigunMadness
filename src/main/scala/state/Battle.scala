@@ -19,6 +19,7 @@ object Battle extends BasicGameState {
       game.update(gc, sbg, delta)
       ui.update(gc, sbg, delta)
     }
+
   }
 
   def render(gc: GameContainer, sbg: StateBasedGame, g: Graphics) = {
@@ -32,6 +33,12 @@ object Battle extends BasicGameState {
       g.setColor(new Color(255, 0, 0, (0.5 * 255).asInstanceOf[Int]))
       g.fillRect(0, 0, Width, Height)
       // images(GameOverID).draw(0,0)
+    }
+    for (player <- game.playerList) {
+      player.draw(g)
+    }
+    for (platform <- game.platformList) {
+      platform.draw(g)
     }
   }
 
