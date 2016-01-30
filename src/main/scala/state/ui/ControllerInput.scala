@@ -7,6 +7,8 @@ import org.newdawn.slick.{GameContainer, Graphics, Color, Input}
 import org.newdawn.slick.state.{StateBasedGame}
 import org.newdawn.slick.util.InputAdapter
 
+import scala.math._
+
 class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) extends InputAdapter() {
   var input : Input = gc.getInput
   //val game = g
@@ -113,7 +115,22 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
     if (!gc.isPaused) {
       for ((cnum,pnum) <- controllers) {
         val p = g.playerList(pnum)
-        p.move(p.speed*input.getAxisValue(cnum,AXIS_X),p.speed*input.getAxisValue(cnum,AXIS_Y))
+        val (xvel, yvel) = p.velocity
+        val dx = (xvel * input.getAxisValue(cnum,AXIS_X)).toInt
+        val dy = (yvel * input.getAxisValue(cnum,AXIS_Y)).toInt
+        var minx = dx
+        var miny = dy
+        for (platform <- g.platformList) {
+          val (vx, vy): (Int, Int) = platform.collision(g.playerList(pnum), (dx, dy))
+          if (abs(vx) < abs(minx)) {
+            minx = vx
+          }
+          if (abs(vy) < abs(miny)) {
+            miny = vy
+          }
+        }
+        println(s"$minx, $miny")
+        g.playerList(pnum).move(minx, miny)
       }
 
       if (controllers.length == 0) {

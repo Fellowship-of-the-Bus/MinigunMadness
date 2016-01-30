@@ -35,7 +35,7 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, num: Int) extends Gam
     case 1 => images(Player2Walk)
     case _ => images(Player1Jetpack)
   }
-  image.scaleFactor = 0.2f
+  image.scaleFactor = 0.1f
 
   def maxHp = base.maxHp
   var hp: Float = maxHp
@@ -44,7 +44,7 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, num: Int) extends Gam
 
   lazy val height = image.getHeight
   lazy val width = image.getWidth
-  def velocity: (Float, Float) = (1.0f, 1.0f)
+  def velocity: (Float, Float) = (speed, speed)
 
   val shape = new Rectangle(0,0,width,height)
   var facingRight = true
