@@ -81,7 +81,7 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
   }
 
   def draw() = {
-    image.draw(x,y,facingRight)
+    if (active) image.draw(x,y,facingRight)
   }
 
   def update(delta: Int) = {
