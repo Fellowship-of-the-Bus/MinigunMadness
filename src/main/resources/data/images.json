@@ -8,5 +8,6 @@
   "Player1Jetpack": "Player1Jetpack.png",
   "Player2Walk": ["Player2Walk1.png", "Player2Walk2.png"],
   "Player2Jetpack": "Player2Jetpack.png",
-  "Background": "Background.png"
+  "Background": "Background.png",
+  "Bullet" : "Bullet.png"
 }
