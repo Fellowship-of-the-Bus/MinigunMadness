@@ -20,15 +20,17 @@ class MinigunMadness(gamename: String) extends StateBasedGame(gamename) {
 
 object MinigunMadness extends App {
   def makeImg(loc: String) = new Image(loc)
-
-  GameConfig.Width = 1280
-  GameConfig.Height = 1024
   GameConfig.FrameRate = 60
+
+  val HeightPercent = 0.9
+  val AspectRatio = 5/4
 
   try {
     import GameConfig._
     Native.loadLibraryFromJar()
     val appgc = new AppGameContainer(new MinigunMadness("Minigun Madness"))
+    Height = (appgc.getScreenHeight * HeightPercent).toInt
+    Width = Height * AspectRatio
     appgc.setDisplayMode(Width, Height, false)
     appgc.setTargetFrameRate(FrameRate)
     appgc.setVSync(true)
