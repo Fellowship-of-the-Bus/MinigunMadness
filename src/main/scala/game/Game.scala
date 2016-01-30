@@ -3,6 +3,7 @@ package mgm
 package game
 import org.newdawn.slick.{AppGameContainer, GameContainer, Graphics, SlickException, Color, Input}
 import org.newdawn.slick.state.{BasicGameState, StateBasedGame}
+import org.newdawn.slick.geom.{Polygon, Transform}
 
 import lib.game.GameConfig.{Height,Width}
 import lib.util.rand
@@ -42,6 +43,25 @@ class Game extends lib.game.Game with TimerListener {
   def update(gc: GameContainer, game: StateBasedGame, delta: Int) = {
     super.update(delta)
 
+    for (bullet <- bulletList.filter(_.active)) {
+      // val (dx, dy) = collision(bullet, bullet.xVel.toInt, bullet.yVel.toInt)
+      // if (dx != bullet.xVel || dy != bullet.yVel) {
+      //   bullet.inactivate
+      // }
+      for (platform <- platformList) {
+        if (collision(bullet, platform)) {
+          bullet.inactivate
+        }
+      }
+      for (player <- playerList.filter(_.active)) {
+        if (bullet.playerNum != player.num && collision(bullet, player)) {
+          player.takeDamage(1)
+          bullet.inactivate
+        }
+      }
+    }
+
+
     // var minx: Int = x
     // var miny: Int = y
     // for (platform <- platformList) {
@@ -76,5 +96,12 @@ class Game extends lib.game.Game with TimerListener {
       }
     }
     (minx, miny)
+  }
+  def collision(go1: GameObject, go2: GameObject): Boolean = {
+    //normalize game object 2
+    val go2NormalizedX = go2.x - go1.x
+    val go2NormalizedY = go2.y - go1.y
+    val go2NormalizedMesh = go2.mesh.transform(Transform.createTranslateTransform(go2NormalizedX, go2NormalizedY))
+    return go1.mesh.intersects(go2NormalizedMesh)
   }
 }

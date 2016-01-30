@@ -46,7 +46,7 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
   image.scaleFactor = Width/(25f * 800f)
 
   def maxHp = base.maxHp
-  var hp: Float = maxHp
+  var hp: Int = maxHp.toInt
   def attack = base.attack
   def speed = base.speed
   var gunAngle: Float = 45
@@ -92,5 +92,12 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
 
   def shoot() = {
     new Bullet(x + width/2, y + height/2, gunAngle, num)
+  }
+
+  def takeDamage(damage: Int) = {
+    hp -= damage
+    if (hp <= 0) {
+      inactivate
+    }
   }
 }

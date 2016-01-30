@@ -23,9 +23,10 @@ class Bullet(xc: Float, yc: Float, angle: Float, var playerNum: Int) extends Gam
 
   val velocity: (Float, Float) = (xVel, yVel)
 
-  val image = images(Bullet);
+  val image = images(Bullet).copy();
   image.setCenterOfRotation(width/2, height/2)
   image.setRotation(-angle+180)
+  image.scaleFactor = 0.1f
 
   val shape = new Rectangle(0,0,width,height)
   def mesh = shape
@@ -43,6 +44,7 @@ class Bullet(xc: Float, yc: Float, angle: Float, var playerNum: Int) extends Gam
   }
 
   def draw() = {
-    image.draw(x, y, width, height)
+    if (active)
+      image.draw(x, y)
   }
 }
