@@ -12,7 +12,7 @@ import mgm.game.{GameObject,Player}
 
 class Bar(location: () => (Float, Float), wd: Float, ht: Float, maxValue: Float, value: () => Float, colors: (Color, Color, Color)) extends UIElement {
   lazy val width: Float = wd
-  lazy val height: Float = ht/10
+  lazy val height: Float = ht/20
   def x = {
     val (x, _) = location()
     x+2
@@ -44,8 +44,6 @@ class Bar(location: () => (Float, Float), wd: Float, ht: Float, maxValue: Float,
       g.setColor(c2)
     }
     g.fillRect(x, y, width * v/maxValue, height)
-    println(s"drawing at $x $y")
-
     g.setColor(color)
   }
 
