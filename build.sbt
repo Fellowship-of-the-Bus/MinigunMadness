@@ -57,7 +57,8 @@ lazy val commonSettings = Seq(
     "junit" % "junit" % "4.12" % "test",
     "com.propensive" %% "rapture-json-jackson" % "2.0.0-M3",
     "com.github.pathikrit" %% "better-files" % "2.14.0",
-    "com.github.fellowship_of_the_bus" %% "fellowship-of-the-bus-lib" % "0.3-SNAPSHOT" changing()
+    "com.github.fellowship_of_the_bus" %% "fellowship-of-the-bus-lib" % "0.3-SNAPSHOT" changing(),
+    "org.jbox2d" % "jbox2d-library" % "2.2.1.1"
   )
 )
 
