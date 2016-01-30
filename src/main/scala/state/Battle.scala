@@ -12,7 +12,7 @@ import ui._
 object Battle extends BasicGameState {
   var game = new Game
 
-  val ui = new Pane(0, 0, Width, Height)(Color.white)
+  val ui = new Pane(0, 0, 0, 0)(Color.white)
 
   var controllerInput: ControllerInput = null
 
@@ -31,12 +31,8 @@ object Battle extends BasicGameState {
   val background = images(Background)
   val platform = Platform(450,450,TetrisT,0)
   def render(gc: GameContainer, sbg: StateBasedGame, g: Graphics) = {
-    ui.render(gc, sbg, g)
     background.draw(0,0,Width,Height)
-
-    val lightBlue = new Color(150,150,255,0)
-    g.setBackground(lightBlue)
-
+    ui.render(gc, sbg, g)
 
     if (game.isGameOver) {
       g.setColor(new Color(255, 0, 0, (0.5 * 255).asInstanceOf[Int]))
@@ -52,7 +48,7 @@ object Battle extends BasicGameState {
   }
 
   def init(gc: GameContainer, sbg: StateBasedGame) = {
-    // ui.addChildren(GameArea, HUD)
+    ui.addChildren(game.playerList.toList.map(new PlayerHUD(_)))
     ui.setState(getID)
     ui.resetGame(game)
     ui.init(gc, sbg)

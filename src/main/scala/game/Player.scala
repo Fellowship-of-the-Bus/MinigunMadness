@@ -30,13 +30,20 @@ object PlayerID {
 case object players extends IDMap[PlayerID, PlayerAttributes]("data/player.json")
 
 class Player(xc: Float, yc: Float, base: PlayerAttributes, num: Int) extends GameObject(xc, yc) {
+  val image = num match {
+    case 0 => images(Player1Walk)
+    case 1 => images(Player2Walk)
+    case _ => images(Player1Jetpack)
+  }
+  image.scaleFactor = 0.2f
+
   def maxHp = base.maxHp
   var hp: Float = maxHp
   def attack = base.attack
   def speed = base.speed
 
-  def height = 1.0f
-  def width = 1.0f
+  lazy val height = image.getHeight
+  lazy val width = image.getWidth
   def velocity: (Float, Float) = (1.0f, 1.0f)
 
   val shape = new Rectangle(0,0,width,height)
@@ -49,13 +56,6 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, num: Int) extends Gam
      x = clamp(x, 0, Width-width)
      y = clamp(y, 0, Height-height)
   }
-
-  val image = num match {
-    case 0 => images(Player1Walk)
-    case 1 => images(Player2Walk)
-    case _ => images(Player1Jetpack)
-  }
-  image.scaleFactor = Width/20000.0f
 
   def draw() = {
     image.draw(x,y,facingRight)

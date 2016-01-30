@@ -10,29 +10,41 @@ import lib.ui.{UIElement,AbstractUIElement}
 
 import mgm.game.{GameObject,Player}
 
-class Lifebar(x: Float, y: Float, width: Float, height: Float, obj: Player) extends AbstractUIElement(x, y, width, height) {
-  def this(x: Float, y: Float, obj: Player) = this(x+2, y, 317, 20, obj)
+class Bar(location: () => (Float, Float), wd: Float, ht: Float, maxValue: Float, value: () => Float, colors: (Color, Color, Color)) extends UIElement {
+  lazy val width: Float = wd
+  lazy val height: Float = ht/10
+  def x = {
+    val (x, _) = location()
+    x+2
+  }
+
+  def y = {
+    val (_, y) = location()
+    y
+  }
 
   def draw(gc: GameContainer, sbg: StateBasedGame, g: Graphics): Unit = {
     val color = g.getColor
 
-    val hp = obj.hp
-    val maxHp = obj.maxHp
+    val v = value()
 
     g.setColor(Color.black)
     g.drawRect(x, y, width, height)
 
-    val lower = maxHp/3
-    val upper = 2*maxHp/3
+    val lower = maxValue/3
+    val upper = 2*maxValue/3
 
-    if (hp > upper) {
-      g.setColor(Color.green)
-    } else if (hp < lower) {
-      g.setColor(Color.red)
+    val (c1, c2, c3) = colors
+
+    if (v > upper) {
+      g.setColor(c1)
+    } else if (v < lower) {
+      g.setColor(c3)
     } else {
-      g.setColor(Color.yellow)
+      g.setColor(c2)
     }
-    g.fillRect(x, y, width * hp/maxHp, height)
+    g.fillRect(x, y, width * v/maxValue, height)
+    println(s"drawing at $x $y")
 
     g.setColor(color)
   }

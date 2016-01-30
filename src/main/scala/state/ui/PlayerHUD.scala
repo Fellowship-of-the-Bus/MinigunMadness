@@ -16,15 +16,17 @@ object PlayerHUD {
 }
 import PlayerHUD.color
 
-class PlayerHUD(x: Float, y: Float, width: Float, height: Float, player: Player, playerColor: Color) extends Pane(x, y, width, height) {
+class PlayerHUD(player: Player) extends Pane(0, 0, 0, 0) {
   override def draw(gc: GameContainer, sbg: StateBasedGame, g: Graphics): Unit = {
     super.draw(gc, sbg, g)
   }
 
   override def init(gc: GameContainer, sbg: StateBasedGame) = {
-    val hp = new Lifebar(0, 0, player)
+    val (width, height) = (player.width, player.height)
+    val hp = new Bar(() => (player.x, player.y), width, height, player.maxHp, () => player.hp,  (Color.green, Color.yellow, Color.red))
+    val jetpack = new Bar(() => (player.x, player.y + 20), width, height, player.maxHp, () => player.hp, (Color.blue, Color.blue, Color.blue))
     setIsVisible(() => player.active)
-    addChildren(hp)
+    addChildren(hp, jetpack)
     super.init(gc, sbg)
   }
 }
