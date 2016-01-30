@@ -25,15 +25,15 @@ case object TetrisJ extends platformType
 object Platform {
   def apply(xc: Int, yc: Int, shape: platformType, rotation: Int) = {
     val platform = shape match {
-      case TetrisI => 
+      case TetrisI =>
         new PlatformI(xc, yc, rotation)
-      case TetrisJ => 
+      case TetrisJ =>
         new PlatformJ(xc, yc, rotation)
       case TetrisL =>
         new PlatformL(xc, yc, rotation)
       case TetrisT =>
         new PlatformT(xc, yc, rotation)
-      case _ => 
+      case _ =>
         new PlatformI(xc, yc, rotation)
     }
     platform
@@ -97,9 +97,6 @@ abstract class Platform(xc: Int, yc: Int, var rotation: Int) extends GameObject(
       } else {
         lowerBound = (lowerBound+upperBound).toFloat/2f
       }
-      println("x loop")
-      println(upperBound)
-      println(lowerBound)
     }
     val allowabledx = dx*(lowerBound + upperBound)/2
     //binary search to get max y movement
@@ -112,9 +109,6 @@ abstract class Platform(xc: Int, yc: Int, var rotation: Int) extends GameObject(
       } else {
         lowerBound = (lowerBound+upperBound).toFloat/2f
       }
-      println("y loop")
-      println(upperBound)
-      println(lowerBound)
     }
     val allowabledy = dy*(lowerBound + upperBound)/2
     return (allowabledx.toInt, allowabledy.toInt)
@@ -136,7 +130,7 @@ class PlatformI(xc: Int, yc: Int, rot: Int) extends Platform(xc, yc, rot) {
 }
 
 class PlatformJ(xc: Int, yc: Int, rot: Int) extends Platform(xc, yc, rot) {
-  
+
   addMeshPoint(1, 2)
   addMeshPoint(2, 2)
   addMeshPoint(2, 3)
@@ -152,7 +146,7 @@ class PlatformJ(xc: Int, yc: Int, rot: Int) extends Platform(xc, yc, rot) {
 }
 
 class PlatformL(xc: Int, yc: Int, rot: Int) extends Platform(xc, yc, rot) {
-  
+
   addMeshPoint(1, 3)
   addMeshPoint(3, 3)
   addMeshPoint(3, 2)
@@ -168,7 +162,7 @@ class PlatformL(xc: Int, yc: Int, rot: Int) extends Platform(xc, yc, rot) {
 }
 
 class PlatformT(xc: Int, yc: Int, rot: Int) extends Platform(xc, yc, rot) {
-  
+
   addMeshPoint(2, 1)
   addMeshPoint(3, 1)
   addMeshPoint(3, 3)
