@@ -11,10 +11,7 @@ import scala.math.abs
 
 class Game extends lib.game.Game with TimerListener {
   val maxPlayers = 4
-  val playerList = new Array[Player](maxPlayers)
-  for (i <- 0 until maxPlayers) {
-    playerList(i) = new Player(i*100, i*100, players(HumanPlayer), i)
-  }
+  var playerList: Array[Player] = null
 
   var platformList: List[Platform] = List()
   platformList = Platform(0,0,TetrisI, 180)::platformList
@@ -24,8 +21,9 @@ class Game extends lib.game.Game with TimerListener {
 
 
   def setPlayers(nplayers: Int) = {
-    for (i <- nplayers until maxPlayers) {
-      playerList(i).inactivate
+    playerList = new Array[Player](nplayers)
+    for (i <- 0 until nplayers) {
+      playerList(i) = new Player(i*100, i*100, players(HumanPlayer), i)
     }
   }
 
