@@ -13,7 +13,7 @@ class Game extends lib.game.Game with TimerListener {
   val maxPlayers = 4
   val playerList = new Array[Player](maxPlayers)
   for (i <- 0 until maxPlayers) {
-    playerList(i) = new Player(0, 0, players(HumanPlayer))
+    playerList(i) = new Player(i*100, i*100, players(HumanPlayer), i)
   }
 
   var platformList: List[Platform] = List()
@@ -32,7 +32,7 @@ class Game extends lib.game.Game with TimerListener {
   addTimer(new TickTimer(240, cleanup _, RepeatForever))
 
   //var projectiles = List[Projectile]()
-  
+
   def cleanup() = {
     //projectiles = projectiles.filter(_.active)
   }

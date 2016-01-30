@@ -71,9 +71,9 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
   }
   if (controllers.length == 0) {
     input.addKeyListener(this)
-    //game.setPlayers(1)
+    g.setPlayers(1)
   } else {
-    //game.setPlayers(controllers.length)
+    g.setPlayers(controllers.length)
   }
 
   override def controllerButtonPressed(controller: Int, button: Int) = {
@@ -111,16 +111,16 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
 
   def update() = {
     if (!gc.isPaused) {
-      /*for ((cnum,pnum) <- controllers) {
-        val p = game.players(pnum)
+      for ((cnum,pnum) <- controllers) {
+        val p = g.playerList(pnum)
         p.move(p.speed*input.getAxisValue(cnum,AXIS_X),p.speed*input.getAxisValue(cnum,AXIS_Y))
       }
 
       if (controllers.length == 0) {
         // support single player if there are no controllers attached
-        val p = game.players(0)
+        val p = g.playerList(0)
         p.move(p.speed*horizontal, p.speed*vertical)
-      }*/
+      }
     }
   }
 

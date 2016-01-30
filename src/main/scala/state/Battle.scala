@@ -18,12 +18,16 @@ object Battle extends BasicGameState {
     if (! gc.isPaused) {
       game.update(gc, sbg, delta)
       ui.update(gc, sbg, delta)
+      for(p <- game.playerList) {
+        p.update(delta)
+      }
     }
 
   }
-
+  val background = images(Background)
   def render(gc: GameContainer, sbg: StateBasedGame, g: Graphics) = {
     ui.render(gc, sbg, g)
+    background.draw(0,0,Width,Height)
 
     val lightBlue = new Color(150,150,255,0)
     g.setBackground(lightBlue)
@@ -35,10 +39,10 @@ object Battle extends BasicGameState {
       // images(GameOverID).draw(0,0)
     }
     for (player <- game.playerList) {
-      player.draw(g)
+      player.draw()
     }
     for (platform <- game.platformList) {
-      platform.draw(g)
+      platform.draw()
     }
   }
 

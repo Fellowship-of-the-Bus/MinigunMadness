@@ -56,7 +56,7 @@ abstract class Platform(xc: Int, yc: Int, var rotation: Int) extends GameObject(
     initialMesh.addPoint(cellWidth*topLeftX, cellHeight*topLeftY)
   }
 
-  def draw(g: Graphics) = {
+  def draw() = {
     image.setCenterOfRotation(width/2, height/2)
     image.setRotation(rotation)
     image.draw(x, y, width, height)
