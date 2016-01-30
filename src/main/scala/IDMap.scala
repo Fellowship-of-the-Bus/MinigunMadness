@@ -15,10 +15,14 @@ import ImageExtractor._
 sealed trait ImageID
 case object FotBLogo extends ImageID
 case object Logo extends ImageID
+case object IBlock extends ImageID
+case object JBlock extends ImageID
+case object LBlock extends ImageID
+case object TBlock extends ImageID
 
 object ImageID {
   implicit object Factory extends IDFactory[ImageID] {
-    val ids = Vector(FotBLogo, Logo)// GameOver, Heart, TopBorder, Background)
+    val ids = Vector(FotBLogo, Logo, IBlock, JBlock, LBlock, TBlock)// GameOver, Heart, TopBorder, Background)
   }
   implicit lazy val extractor =
     Json.extractor[String].map(Factory.fromString(_))
