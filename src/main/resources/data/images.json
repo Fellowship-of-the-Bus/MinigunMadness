@@ -8,6 +8,10 @@
   "Player1Jetpack": "Player1Jetpack.png",
   "Player2Walk": ["Player2Walk1.png", "Player2Walk2.png"],
   "Player2Jetpack": "Player2Jetpack.png",
+  "Player3Walk": ["Player3Walk1.png", "Player3Walk2.png"],
+  "Player3Jetpack": "Player3Jetpack.png",
+  "Player4Walk": ["Player4Walk1.png", "Player4Walk2.png"],
+  "Player4Jetpack": "Player4Jetpack.png",
   "Background": "Background.png",
   "Bullet" : "Bullet.png"
 }

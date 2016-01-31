@@ -40,6 +40,8 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
   val imageList = num match {
     case 0 => List(images(Player1Walk), images(Player1Jetpack))
     case 1 => List(images(Player2Walk), images(Player2Jetpack))
+    case 2 => List(images(Player3Walk), images(Player3Jetpack))
+    case 3 => List(images(Player4Walk), images(Player4Jetpack))
     case _ => List(images(Player1Jetpack), images(Player2Jetpack))
   }
 
