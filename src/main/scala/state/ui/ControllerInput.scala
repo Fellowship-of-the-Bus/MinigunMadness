@@ -71,15 +71,11 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
       controllers = controllers :+ ((i, controllers.length))
     }
   }
-  if (controllers.length == 0) {
+  if (Menu.keyboardPlayer) {
     input.addKeyListener(this)
-    g.setPlayers(1)
+    g.setPlayers(controllers.length + 1)
   } else {
-    if (Menu.keyboardPlayer) {
-      g.setPlayers(controllers.length + 1)
-    } else {
-      g.setPlayers(controllers.length)
-    }
+    g.setPlayers(controllers.length)
   }
 
   override def controllerButtonPressed(controller: Int, button: Int) = {
@@ -97,10 +93,10 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
       } else if (sbg.getCurrentStateID == Mode.BattleID) {
         val player = g.playerList(controller)
         if (player.active) {
-          if (button == BUTTON_LB) {
+          if (button == BUTTON_LB || button == BUTTON_LT) {
             player.jetpackOn = true
           }
-          if (button == BUTTON_RB) {
+          if (button == BUTTON_RB || button == BUTTON_RT) {
             player.shooting = true
           }
         }
@@ -118,11 +114,11 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
   override def controllerButtonReleased(controller: Int, button: Int) = {
     if (sbg.getCurrentStateID == Mode.BattleID) {
       val player = g.playerList(controller)
-      if (button == BUTTON_LB) {
+      if (button == BUTTON_LB || button == BUTTON_LT) {
         player.jetpackOn = false
         player.imageIndex = 0
       }
-      if (button == BUTTON_RB) {
+      if (button == BUTTON_RB || button == BUTTON_RT) {
         player.shooting = false
       }
     }
@@ -226,7 +222,7 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
       case Input.KEY_P => gc.setPaused(!gc.isPaused)
 
       //jetpack
-      case Input.KEY_SPACE => g.playerList(0).jetpackOn = true
+      case Input.KEY_SPACE => g.playerList(controllers.length).jetpackOn = true
 
       //rotate gun
       case Input.KEY_E => clockwise = 1
@@ -265,7 +261,7 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
       case Input.KEY_D => horizontal -= 1
       case Input.KEY_W => vertical -= -1
       case Input.KEY_S => vertical -= 1
-      case Input.KEY_SPACE => g.playerList(0).jetpackOn = false
+      case Input.KEY_SPACE => g.playerList(controllers.length).jetpackOn = false
       case _ => ()
     }
   }

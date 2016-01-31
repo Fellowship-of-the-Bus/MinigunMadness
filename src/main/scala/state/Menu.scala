@@ -20,7 +20,7 @@ object Menu extends BasicGameState {
   implicit var input: Input = null
   implicit var SBGame: StateBasedGame = null
 
-  var keyboardPlayer = false
+  var keyboardPlayer = true
 
   lazy val choices = List(
     Button("New Game (A/X)", centerx, Height/2, () => SBGame.enterState(Mode.BattleID)),

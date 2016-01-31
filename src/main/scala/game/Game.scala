@@ -72,6 +72,9 @@ class Game extends lib.game.Game with TimerListener {
       for (player <- playerList.filter(_.active)) {
         if (bullet.playerNum != player.num && collision(bullet, player)) {
           player.takeDamage(1)
+          if (!player.active) {
+            state.Battle.score(bullet.playerNum) += 1
+          }
           bullet.inactivate
         }
       }
