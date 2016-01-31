@@ -103,7 +103,7 @@ abstract class Platform(xc: Int, yc: Int, var rotation: Int) extends GameObject(
     }
     val allowabledx =
       if ((lowerBound + upperBound)/2 < tolerance) 0f
-      else dx*(lowerBound + upperBound)/2
+      else dx*lowerBound//dx*(lowerBound + upperBound)/2
     //binary search to get max y movement
     lowerBound = 0
     upperBound = 1
@@ -117,7 +117,7 @@ abstract class Platform(xc: Int, yc: Int, var rotation: Int) extends GameObject(
     }
     val allowabledy =
       if ((lowerBound + upperBound)/2 < tolerance) 0f
-      else dy*(lowerBound + upperBound)/2
+      else dy*lowerBound//(lowerBound + upperBound)/2
     return (allowabledx, allowabledy)
   }
 }
