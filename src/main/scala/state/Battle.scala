@@ -39,9 +39,16 @@ object Battle extends BasicGameState {
       }
       for (platform <- game.platformList) {
         platform.move();
-        if (platform.y > Height && platform.active) {
-          platform.inactivate();
-          game.platformList = game.genPlatform((platform.x / game.areaDimension).toInt, -1)::game.platformList
+        if (platform.active) {
+          if (platform.y > Height) {
+            platform.inactivate();
+            game.platformList = game.genPlatform((platform.x / game.areaDimension).toInt, -1)::game.platformList
+          }
+          for(p <- game.playerList) {
+            if (game.collision(p, platform)) {
+              p.move(0, 1)
+            }
+          }
         }
       }
       game.update(gc, sbg, delta)
