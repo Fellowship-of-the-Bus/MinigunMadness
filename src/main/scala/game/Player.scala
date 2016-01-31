@@ -13,6 +13,7 @@ import lib.game.GameConfig.{Width,Height}
 import lib.game.GameConfig
 import lib.util.{TickTimer,TimerListener,FireN}
 import lib.math.clamp
+import scala.math._
 
 sealed trait PlayerID
 case object HumanPlayer extends PlayerID
@@ -97,15 +98,23 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
     y += yamt
     x = clamp(x, 0, Width-width)
     y = clamp(y, 0, Height-height)
-    if (!onBlock && !jetpackOn) {
+    if (!onBlock && !jetpackActive) {
       yvel += GravityAcceleration
     } else {
       yvel = 0f
     }
   }
-
+  val minigun = images(Minigun).copy()
+  minigun.scaleFactor = Width/(25f * 2273 / 1.3f )
+  minigun.setCenterOfRotation(minigun.width*1f/5f, minigun.height/2)
   def draw() = {
-    if (active) image.draw(x,y,facingRight)
+    if (active) {
+      image.draw(x,y,facingRight)
+
+      minigun.setRotation(-gunAngle)
+      minigun.draw(x + image.width/2 - minigun.width*1f/5f, y + image.height/2 - minigun.height/2)
+
+    }
   }
 
   def update(delta: Int, g: Game) = {
@@ -116,15 +125,19 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
     fuel = clamp(fuel+amt, 0, maxFuel)
     if (jetpackOn && fuel < fuelConsumption) imageIndex = 0
     image.update(delta)
-    if (!onBlock && !jetpackOn) {
-      val (minx,miny) = g.collision(this,0,yvel.toInt)
-      //if (miny < yvel) onBlock = true
-      move(0,miny)
+    if (!onBlock && !jetpackActive) {
+      val (minx,miny) = g.collision(this,0,yvel)
+      if (miny < yvel) {
+        onBlock = true
+      }
+      else move(0,miny)
     }
   }
 
   def shoot() = {
-    new Bullet(x + width/2, y + height/2, gunAngle, num)
+    var (additionalx, additionaly) = (minigun.width*4f/5f * cos((-gunAngle*Pi)/180f), minigun.width* 4f/5f*sin((-gunAngle*Pi)/180f))
+    additionalx -= width/2f
+    new Bullet((x + width/2f + additionalx).toInt, (y + height/2f + additionaly).toInt, gunAngle, num)
   }
 
   def takeDamage(damage: Int) = {

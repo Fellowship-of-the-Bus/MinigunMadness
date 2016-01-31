@@ -28,15 +28,11 @@ class Game extends lib.game.Game with TimerListener {
         platformList = genPlatform(i, k)::platformList
     }
   }
-  // platformList = Platform(0,0,TetrisI, 180)::platformList
-  // platformList = Platform(0, 300, TetrisJ, 270)::platformList
-  // platformList = Platform(300, 0, TetrisL, 180)::platformList
-  // platformList = Platform(300, 300, TetrisT, 180)::platformList
 
   def setPlayers(nplayers: Int) = {
     playerList = new Array[Player](nplayers)
     for (i <- 0 until nplayers) {
-      playerList(i) = new Player((0.5f + i) * areaDimension, areaDimension, players(HumanPlayer), i)
+      playerList(i) = new Player((0.25f + i) * areaDimension, areaDimension, players(HumanPlayer), i)
     }
   }
 
@@ -108,11 +104,11 @@ class Game extends lib.game.Game with TimerListener {
     Platform(row * areaDimension, column * areaDimension, platformType, rand(4) * 90)
   }
 
-  def collision(go: GameObject, dx: Int, dy: Int) = {
+  def collision(go: GameObject, dx: Float, dy: Float) = {
     var minx = dx
     var miny = dy
     for (platform <- platformList) {
-      val (vx, vy): (Int, Int) = platform.collision(go, (dx, dy))
+      val (vx, vy): (Float, Float) = platform.collision(go, (dx, dy))
       if (abs(vx) < abs(minx)) {
         minx = vx
       }

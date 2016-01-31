@@ -13,5 +13,6 @@
   "Player4Walk": ["Player4Walk1.png", "Player4Walk2.png"],
   "Player4Jetpack": "Player4Jetpack.png",
   "Background": "Background.png",
-  "Bullet" : "Bullet.png"
+  "Bullet" : "Bullet.png",
+  "Minigun" : "Minigun.png"
 }

@@ -92,11 +92,20 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
         }
       } else if (sbg.getCurrentStateID == Mode.BattleID) {
         val player = g.playerList(controller)
-        if (button == BUTTON_LB) {
-          player.jetpackOn = true
+        if (player.active) {
+          if (button == BUTTON_LB) {
+            player.jetpackOn = true
+          }
+          if (button == BUTTON_RB) {
+            player.shooting = true
+          }
         }
-        if (button == BUTTON_RB) {
-          player.shooting = true
+        if (g.isGameOver) {
+          if (button == BUTTON_BACK) {
+            sbg.enterState(Mode.MenuID)
+            Battle.reset(gc, sbg)
+            input.removeControllerListener(this)
+          }
         }
       }
     }
@@ -140,10 +149,12 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
         if (p.jetpackActive) p.imageIndex = 1
 
         val (xvel, yvel) =
-          if (p.jetpackOn) p.jetpackVelocity
+          if (p.jetpackActive) p.jetpackVelocity
           else p.velocity
-        val dx = (xvel * input.getAxisValue(cnum,AXIS_X)).toInt
-        val dy = (yvel * input.getAxisValue(cnum,AXIS_Y)).toInt
+        val dx = (xvel * input.getAxisValue(cnum,AXIS_X))
+        val dy =
+          if (p.jetpackActive) (yvel * input.getAxisValue(cnum,AXIS_Y))
+          else 0f
         val (minx,miny) = g.collision(p,dx,dy)
         p.move(minx, miny)
         p.onBlock = (miny < dy)
@@ -162,14 +173,17 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
         // support single player if there are no controllers attached
         val p = g.playerList(0)
         val (xvel, yvel) = p.velocity
-        val (minx, miny) = g.collision(p,(xvel * horizontal).toInt, (yvel * vertical).toInt)
+        val (minx, miny) = g.collision(p,(xvel * horizontal), (yvel * vertical))
         p.move(minx, miny)
+        p.gunAngle += clockwise * 1
+        p.gunAngle = ( p.gunAngle + 360 )% 360
       }
     }
   }
 
   var horizontal = 0
   var vertical = 0
+  var clockwise = 0
   override def keyPressed(key: Int, c: Char) = {
     key match {
       // movement
@@ -184,7 +198,14 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
       //shoot
       case Input.KEY_SPACE => g.bulletList = g.playerList(0).shoot()::g.bulletList
 
-      case _ => ()
+      //rotate gun
+      case Input.KEY_E => clockwise = 1
+      case Input.KEY_R => clockwise = -1
+
+      //jetpack
+      case Input.KEY_RCONTROL => g.playerList(0).jetpackOn = true
+
+      case _ => clockwise = 0
     }
 
     if (!gc.isPaused) {
