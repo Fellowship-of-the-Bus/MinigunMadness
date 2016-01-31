@@ -20,11 +20,14 @@ case object HumanPlayer extends PlayerID
 case class PlayerAttributes(
   maxHp: Float,
   attack: Float,
-  speed: Float,
+  moveSpeed: Float,
+  shotMoveSpeedPenalty: Float, // ratio applied to movement/jetpack speed when shooting
   maxFuel: Float,
   jetpackSpeed: Float,
   fuelConsumption: Float,
-  fuelRecovery: Float
+  fuelRecovery: Float,
+  gunTurnRate: Float,         // angle/frame that gun changes while not shooting
+  shotGunTurnRate: Float      // angle/frame that gun changes while shooting
 )
 
 object PlayerID {
@@ -56,11 +59,20 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
 
   def image = imageList(imageIndex)
 
+  def gunTurnRate =
+    if (shooting) base.shotGunTurnRate
+    else base.gunTurnRate
+
+
   def maxHp = base.maxHp
   var hp: Int = maxHp.toInt
   def attack = base.attack
-  def speed = base.speed
+  def speed = base.moveSpeed * shotMoveSpeedPenalty
   var gunAngle: Float = 90
+
+  def shotMoveSpeedPenalty =
+    if (shooting) base.shotMoveSpeedPenalty
+    else 1
 
   def maxFuel = base.maxFuel
   var fuel: Float = base.maxFuel
@@ -68,12 +80,9 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
   var jetpackOn = false
   def fuelConsumption = base.fuelConsumption
   def fuelRecovery = base.fuelRecovery
-  def jetpackVelocity: (Float, Float) = {
-    if (fuel > 0) {
-      (jetpackSpeed, jetpackSpeed)
-    } else {
-      velocity
-    }
+  private def jetpackVelocity: (Float, Float) = {
+    val v = jetpackSpeed*shotMoveSpeedPenalty
+    (v, v)
   }
   def jetpackActive = jetpackOn && fuel >= fuelConsumption
 
@@ -81,9 +90,10 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
 
   lazy val height = image.getHeight
   lazy val width = image.getWidth
-  var xvel = speed
   var yvel = 0f
-  def velocity: (Float, Float) = (xvel, yvel)
+  def velocity: (Float, Float) =
+    if (jetpackActive) jetpackVelocity
+    else (speed, yvel)
 
   val shape = new Rectangle(0,0,width,height)
   def facingRight = (gunAngle <= 90 || gunAngle >= 270)

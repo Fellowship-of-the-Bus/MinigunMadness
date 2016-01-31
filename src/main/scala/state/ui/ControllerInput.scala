@@ -148,9 +148,7 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
         val p = g.playerList(pnum)
         if (p.jetpackActive) p.imageIndex = 1
 
-        val (xvel, yvel) =
-          if (p.jetpackActive) p.jetpackVelocity
-          else p.velocity
+        val (xvel, yvel) = p.velocity
         val dx = (xvel * input.getAxisValue(cnum,AXIS_X))
         val dy =
           if (p.jetpackActive) (yvel * input.getAxisValue(cnum,AXIS_Y))
@@ -161,9 +159,15 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
 
         val anglex = input.getAxisValue(cnum, RIGHT_AXIS_X)
         val angley = input.getAxisValue(cnum, RIGHT_AXIS_Y)
-        var angle = toDegrees(atan2(anglex,angley)) - 90
-        if (angle < 0) angle += 360
-        p.gunAngle = angle.toFloat;
+        if (anglex != 0 || angley != 0) {
+          var angle = toDegrees(atan2(anglex,angley)) - 90
+          if (angle < 0) angle += 360
+
+          val diff = angle - p.gunAngle
+          if (diff > 0 && diff < 180 || diff > -360 && diff < -180) p.gunAngle += p.gunTurnRate
+          else p.gunAngle -= p.gunTurnRate
+          p.gunAngle = (p.gunAngle + 360) % 360
+        }
 
         if (p.shooting && p.active) g.bulletList = g.playerList(pnum).shoot()::g.bulletList
 

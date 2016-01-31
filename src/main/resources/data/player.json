@@ -2,10 +2,13 @@
   "HumanPlayer": {
     "maxHp": 20,
     "attack": 5,
-    "speed": 5,
+    "moveSpeed": 5,
+    "shotMoveSpeedPenalty": 0.5,
     "maxFuel": 300,
     "jetpackSpeed": 10,
     "fuelRecovery": 1,
-    "fuelConsumption": 2
+    "fuelConsumption": 2,
+    "gunTurnRate": 2,
+    "shotGunTurnRate": 1
   }
 }
