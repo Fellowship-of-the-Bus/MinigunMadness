@@ -104,6 +104,7 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
           if (button == BUTTON_BACK) {
             sbg.enterState(Mode.MenuID)
             Battle.reset(gc, sbg)
+            input.removeControllerListener(this)
           }
         }
       }
