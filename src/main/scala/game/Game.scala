@@ -109,4 +109,12 @@ class Game extends lib.game.Game with TimerListener {
     // val go2NormalizedMesh = go2.mesh.transform(Transform.createTranslateTransform(go2NormalizedX, go2NormalizedY))
     // return go1.mesh.intersects(go2NormalizedMesh)
   }
+
+  var winner = -1
+  override def gameOver() = {
+    super.gameOver()
+    for (p <- playerList; if (p.active)) {
+      winner = p.num
+    }
+  }
 }

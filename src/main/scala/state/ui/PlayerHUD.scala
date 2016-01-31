@@ -22,9 +22,9 @@ class PlayerHUD(player: Player) extends Pane(0, 0, 0, 0) {
   }
 
   override def init(gc: GameContainer, sbg: StateBasedGame) = {
-    val (width, height) = (player.width, player.height)
-    val hp = new Bar(() => (player.x, player.y - height/10), width, height, player.maxHp, () => player.hp,  (Color.green, Color.yellow, Color.red))
-    val jetpack = new Bar(() => (player.x, player.y - height/20), width, height, player.maxFuel, () => player.fuel, (Color.orange, new Color(255, 165, 0), new Color(248, 128, 23)))
+    val (width, height) = (player.width, player.height/5)
+    val hp = new Bar(() => (player.x+2, player.y - 2*height), width, height, player.maxHp, () => player.hp,  (Color.green, Color.yellow, Color.red))
+    val jetpack = new Bar(() => (player.x+2, player.y - height), width, height, player.maxFuel, () => player.fuel, (Color.orange, new Color(255, 165, 0), new Color(248, 128, 23)))
     setIsVisible(() => player.active)
     addChildren(hp, jetpack)
     super.init(gc, sbg)

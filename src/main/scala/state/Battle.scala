@@ -10,9 +10,19 @@ import lib.game.GameConfig.{Width,Height}
 import ui._
 
 object Battle extends BasicGameState {
-  var game = new Game
+  var game: Game = null
 
-  val ui = new Pane(0, 0, 0, 0)(Color.white)
+  val playerColor = {
+    val alpha = (0.5 * 255).asInstanceOf[Int]
+    Array(
+      new Color(255, 0, 0, alpha),
+      new Color(0, 0, 255, alpha),
+      new Color(0, 255, 0, alpha),
+      new Color(255, 255, 255, alpha)
+    )
+  }
+
+  var ui: Pane = null
 
   var controllerInput: ControllerInput = null
 
@@ -21,10 +31,10 @@ object Battle extends BasicGameState {
       game.update(gc, sbg, delta)
       ui.update(gc, sbg, delta)
       if (controllerInput != null) {
-        controllerInput.update();
+        controllerInput.update()
       }
       for(p <- game.playerList) {
-        p.update(delta)
+        p.update(delta,game)
       }
       for(bullet <- game.bulletList) {
         bullet.move()
@@ -37,11 +47,16 @@ object Battle extends BasicGameState {
     ui.render(gc, sbg, g)
 
     if (game.isGameOver) {
-      g.setColor(new Color(255, 0, 0, (0.5 * 255).asInstanceOf[Int]))
+      g.setColor(playerColor(game.winner))
       g.fillRect(0, 0, Width, Height)
       // images(GameOverID).draw(0,0)
     }
     for (player <- game.playerList) {
+      val alivePlayers = game.playerList.filter(_.active).length
+      if (alivePlayers == 1) {
+        game.gameOver()
+      }
+
       player.draw()
     }
     for (platform <- game.platformList) {
@@ -53,12 +68,17 @@ object Battle extends BasicGameState {
   }
 
   def init(gc: GameContainer, sbg: StateBasedGame) = {
+    reset(gc, sbg)
+  }
+
+  def reset(gc: GameContainer, sbg: StateBasedGame) = {
+    game = new Game
+    ui = new Pane(0, 0, 0, 0)(Color.white)
     controllerInput = new ControllerInput(game, gc, sbg)
     ui.addChildren(game.playerList.toList.map(new PlayerHUD(_)))
     ui.setState(getID)
     ui.resetGame(game)
     ui.init(gc, sbg)
-
   }
 
   def getID() = Mode.BattleID

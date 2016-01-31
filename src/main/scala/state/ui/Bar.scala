@@ -12,10 +12,11 @@ import mgm.game.{GameObject,Player}
 
 class Bar(location: () => (Float, Float), wd: Float, ht: Float, maxValue: Float, value: () => Float, colors: (Color, Color, Color)) extends UIElement {
   lazy val width: Float = wd
-  lazy val height: Float = ht/20
+  lazy val height: Float = ht
+
   def x = {
     val (x, _) = location()
-    x+2
+    x
   }
 
   def y = {

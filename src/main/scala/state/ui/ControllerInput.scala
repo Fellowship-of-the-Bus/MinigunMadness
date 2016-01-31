@@ -92,12 +92,19 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
         }
       } else if (sbg.getCurrentStateID == Mode.BattleID) {
         val player = g.playerList(controller)
-        if (button == BUTTON_LB) {
-          player.jetpackOn = true
-          if (player.fuel > 0) player.imageIndex = 1
+        if (player.active) {
+          if (button == BUTTON_LB) {
+            player.jetpackOn = true
+          }
+          if (button == BUTTON_RB) {
+            player.shooting = true
+          }
         }
-        if (button == BUTTON_RB) {
-          player.shooting = true
+        if (g.isGameOver) {
+          if (button == BUTTON_BACK) {
+            sbg.enterState(Mode.MenuID)
+            Battle.reset(gc, sbg)
+          }
         }
       }
     }
@@ -111,7 +118,6 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
         player.imageIndex = 0
       }
       if (button == BUTTON_RB) {
-
         player.shooting = false
       }
     }
@@ -139,6 +145,8 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
     if (!gc.isPaused) {
       for ((cnum,pnum) <- controllers) {
         val p = g.playerList(pnum)
+        if (p.jetpackActive) p.imageIndex = 1
+
         val (xvel, yvel) =
           if (p.jetpackOn) p.jetpackVelocity
           else p.velocity
@@ -146,6 +154,7 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
         val dy = (yvel * input.getAxisValue(cnum,AXIS_Y)).toInt
         val (minx,miny) = g.collision(p,dx,dy)
         p.move(minx, miny)
+        p.onBlock = (miny < dy)
 
         val anglex = input.getAxisValue(cnum, RIGHT_AXIS_X)
         val angley = input.getAxisValue(cnum, RIGHT_AXIS_Y)
@@ -153,7 +162,7 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
         if (angle < 0) angle += 360
         p.gunAngle = angle.toFloat;
 
-        if (p.shooting) g.bulletList = g.playerList(pnum).shoot()::g.bulletList
+        if (p.shooting && p.active) g.bulletList = g.playerList(pnum).shoot()::g.bulletList
 
       }
 
