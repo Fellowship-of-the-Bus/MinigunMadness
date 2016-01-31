@@ -163,12 +163,15 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
         val (xvel, yvel) = p.velocity
         val (minx, miny) = g.collision(p,(xvel * horizontal).toInt, (yvel * vertical).toInt)
         p.move(minx, miny)
+        p.gunAngle += clockwise * 1
+        p.gunAngle = ( p.gunAngle + 360 )% 360
       }
     }
   }
 
   var horizontal = 0
   var vertical = 0
+  var clockwise = 0
   override def keyPressed(key: Int, c: Char) = {
     key match {
       // movement
@@ -183,7 +186,11 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
       //shoot
       case Input.KEY_SPACE => g.bulletList = g.playerList(0).shoot()::g.bulletList
 
-      case _ => ()
+      //rotate gun
+      case Input.KEY_E => clockwise = 1
+      case Input.KEY_R => clockwise = -1
+
+      case _ => clockwise = 0
     }
 
     if (!gc.isPaused) {

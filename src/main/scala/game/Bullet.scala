@@ -51,20 +51,20 @@ class Bullet(xc: Float, yc: Float, angle: Float, var playerNum: Int) extends Gam
   def draw(g:Graphics) = {
     if (active) {
       image.draw(x, y)
-      var (prevx, prevy): (Float, Float) = (0-1,-1)
-      for (i <- 0 until mesh.getPointCount()) {
-        val px = mesh.getPoint(i)(0)
-        val py = mesh.getPoint(i)(1)
+      // var (prevx, prevy): (Float, Float) = (0-1,-1)
+      // for (i <- 0 until mesh.getPointCount()) {
+      //   val px = mesh.getPoint(i)(0)
+      //   val py = mesh.getPoint(i)(1)
 
-        if (prevx == -1 && prevy == -1) {
-          prevx = px
-          prevy = py
-        } else {
-          g.drawGradientLine(x+prevx, y+prevy, Color.green, x+px, y+py, Color.green)
-          prevx = px
-          prevy = py
-        }
-      }
+      //   if (prevx == -1 && prevy == -1) {
+      //     prevx = px
+      //     prevy = py
+      //   } else {
+      //     g.drawGradientLine(x+prevx, y+prevy, Color.green, x+px, y+py, Color.green)
+      //     prevx = px
+      //     prevy = py
+      //   }
+      // }
     }
   }
 }
