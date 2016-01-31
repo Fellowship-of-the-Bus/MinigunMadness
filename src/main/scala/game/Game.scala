@@ -17,16 +17,26 @@ class Game extends lib.game.Game with TimerListener {
   var platformList: List[Platform] = List()
   var bulletList: List[Bullet] = List()
 
-  platformList = Platform(0,0,TetrisI, 180)::platformList
-  platformList = Platform(0, 300, TetrisJ, 270)::platformList
-  platformList = Platform(300, 0, TetrisL, 180)::platformList
-  platformList = Platform(300, 300, TetrisT, 180)::platformList
-
+  val nColumns = 5
+  val nRows = 4
+  val areaDimension = Width/5
+  for (i <- 0 until nColumns) {
+    for (k <- 0 until nRows) {
+      if (k == 1)
+        platformList = Platform(i * areaDimension, k * areaDimension,TetrisT,0)::platformList
+      else
+        platformList = genPlatform(i, k)::platformList
+    }
+  }
+  // platformList = Platform(0,0,TetrisI, 180)::platformList
+  // platformList = Platform(0, 300, TetrisJ, 270)::platformList
+  // platformList = Platform(300, 0, TetrisL, 180)::platformList
+  // platformList = Platform(300, 300, TetrisT, 180)::platformList
 
   def setPlayers(nplayers: Int) = {
     playerList = new Array[Player](nplayers)
     for (i <- 0 until nplayers) {
-      playerList(i) = new Player(i*100, i*100, players(HumanPlayer), i)
+      playerList(i) = new Player((0.5f + i) * areaDimension, areaDimension, players(HumanPlayer), i)
     }
   }
 
@@ -81,6 +91,21 @@ class Game extends lib.game.Game with TimerListener {
     for (p <- players; if (p.active)) {
       p.update(delta, this)
     }*/
+  }
+
+  def genPlatform(row: Int, column: Int) = {
+    val typeNum = rand(4)
+    val platformType = typeNum match {
+      case 0 => 
+       TetrisI
+      case 1 =>
+       TetrisJ
+      case 2 =>
+       TetrisL
+      case 3 =>
+       TetrisT
+    }
+    Platform(row * areaDimension, column * areaDimension, platformType, rand(4) * 90)
   }
 
   def collision(go: GameObject, dx: Int, dy: Int) = {
