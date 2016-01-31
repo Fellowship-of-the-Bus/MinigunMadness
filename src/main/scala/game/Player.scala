@@ -135,7 +135,8 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
   }
 
   def shoot() = {
-    val (additionalx, additionaly) = (minigun.width*4f/5f * cos((gunAngle*Pi)/180f), minigun.width* 4f/5f*sin((gunAngle*Pi)/180f))
+    var (additionalx, additionaly) = (minigun.width*4f/5f * cos((gunAngle*Pi)/180f), minigun.width* 4f/5f*sin((gunAngle*Pi)/180f))
+    additionalx -= width/2f
     new Bullet((x + width/2f + additionalx).toInt, (y + height/2f + additionaly).toInt, gunAngle, num)
   }
 

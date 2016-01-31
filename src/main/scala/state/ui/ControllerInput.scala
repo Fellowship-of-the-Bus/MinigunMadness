@@ -202,6 +202,9 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
       case Input.KEY_E => clockwise = 1
       case Input.KEY_R => clockwise = -1
 
+      //jetpack
+      case Input.KEY_RCONTROL => g.playerList(0).jetpackOn = true
+
       case _ => clockwise = 0
     }
 
