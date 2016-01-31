@@ -37,18 +37,23 @@ object PlayerID {
 case object players extends IDMap[PlayerID, PlayerAttributes]("data/player.json")
 
 class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends GameObject(xc, yc) {
-  val image = num match {
-    case 0 => images(Player1Walk)
-    case 1 => images(Player2Walk)
-    case _ => images(Player1Jetpack)
+  val imageList = num match {
+    case 0 => List(images(Player1Walk), images(Player1Jetpack))
+    case 1 => List(images(Player2Walk), images(Player2Jetpack))
+    case _ => List(images(Player1Jetpack), images(Player2Jetpack))
   }
-  image.scaleFactor = Width/(25f * 800f)
+
+  var imageIndex = 0
+
+  imageList(0).scaleFactor = Width/(25f * 800f)
+  imageList(1).scaleFactor = Width/(25f * 800f)
+  def image = imageList(imageIndex)
 
   def maxHp = base.maxHp
   var hp: Int = maxHp.toInt
   def attack = base.attack
   def speed = base.speed
-  var gunAngle: Float = 45
+  var gunAngle: Float = 90
 
   def maxFuel = base.maxFuel
   var fuel: Float = base.maxFuel
@@ -80,7 +85,7 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
   }
 
   def draw() = {
-    image.draw(x,y,facingRight)
+    if (active) image.draw(x,y,facingRight)
   }
 
   def update(delta: Int) = {
@@ -88,6 +93,7 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
       if (jetpackOn) -base.fuelConsumption
       else base.fuelRecovery
     fuel = clamp(fuel+amt, 0, maxFuel)
+    if (fuel == 0) imageIndex = 0
     image.update(delta)
   }
 

@@ -90,18 +90,11 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
         else if (button == BUTTON_B) {
           System.exit(0)
         }
-      /*} else {
-        if (button == BUTTON_A) {
-          game.players(controller).tryAttack(game)
-        } else if (button == BUTTON_B) {
-          if (game.players(controller).imgs.indexOf(game.players(controller).img) != -1) {
-            game.players(controller).tryAttack2(game)
-          }
-        }*/
       } else if (sbg.getCurrentStateID == Mode.BattleID) {
         val player = g.playerList(controller)
         if (button == BUTTON_LB) {
           player.jetpackOn = true
+          if (player.fuel > 0) player.imageIndex = 1
         }
         if (button == BUTTON_RB) {
           player.shooting = true
@@ -115,6 +108,7 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
       val player = g.playerList(controller)
       if (button == BUTTON_LB) {
         player.jetpackOn = false
+        player.imageIndex = 0
       }
       if (button == BUTTON_RB) {
 

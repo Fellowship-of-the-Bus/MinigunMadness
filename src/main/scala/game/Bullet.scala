@@ -2,8 +2,8 @@ package com.github.fellowship_of_the_bus
 package mgm
 package game
 
-import org.newdawn.slick.{GameContainer, Graphics}
-import org.newdawn.slick.geom.{Rectangle}
+import org.newdawn.slick.{GameContainer, Graphics, Color}
+import org.newdawn.slick.geom.{Rectangle, Transform}
 
 import lib.ui.{Drawable}
 import lib.game.GameConfig.{Width,Height}
@@ -48,7 +48,7 @@ class Bullet(xc: Float, yc: Float, angle: Float, var playerNum: Int) extends Gam
   val velocity: (Float, Float) = (xVel, yVel)
 
   val shape = new Rectangle(0,0,width,height)
-  def mesh = shape
+  def mesh = shape.transform(Transform.createRotateTransform(rad, width/2, height/2))
 
   override def move() {
     // Check Collsion
@@ -62,8 +62,23 @@ class Bullet(xc: Float, yc: Float, angle: Float, var playerNum: Int) extends Gam
     y = y + yVel
   }
 
-  def draw() = {
-    if (active)
+  def draw(g:Graphics) = {
+    if (active) {
       image.draw(x, y)
+      var (prevx, prevy): (Float, Float) = (0-1,-1)
+      for (i <- 0 until mesh.getPointCount()) {
+        val px = mesh.getPoint(i)(0)
+        val py = mesh.getPoint(i)(1)
+
+        if (prevx == -1 && prevy == -1) {
+          prevx = px
+          prevy = py
+        } else {
+          g.drawGradientLine(x+prevx, y+prevy, Color.green, x+px, y+py, Color.green)
+          prevx = px
+          prevy = py
+        }
+      }
+    }
   }
 }
