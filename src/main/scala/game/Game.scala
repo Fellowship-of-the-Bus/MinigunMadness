@@ -45,7 +45,7 @@ class Game extends lib.game.Game with TimerListener {
     }
   }
 
-  add(new TickTimer(240, cleanup _, RepeatForever))
+  add(new TickTimer(120, cleanup _, RepeatForever))
 
   //var projectiles = List[Projectile]()
 
