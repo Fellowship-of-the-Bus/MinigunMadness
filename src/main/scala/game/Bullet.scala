@@ -32,7 +32,7 @@ object bullets extends IDMap[ProjectileID, BulletAttributes]("data/projectile.js
 
 class Bullet(xc: Float, yc: Float, angle: Float, var playerNum: Int) extends GameObject(xc, yc) {
   val base = bullets(BulletProjectile)
-  val rad = angle * (math.Pi / 180f).toFloat
+  val rad = -angle * (math.Pi / 180f).toFloat
   val speed = base.speed
   val xVel = speed * math.cos(rad).toFloat
   val yVel = speed * math.sin(rad).toFloat
@@ -40,7 +40,7 @@ class Bullet(xc: Float, yc: Float, angle: Float, var playerNum: Int) extends Gam
   val image = images(Bullet).copy
   image.scaleFactor = 0.1f
   image.setCenterOfRotation(width/2, height/2)
-  image.setRotation(angle + 180)
+  image.setRotation(-angle + 180)
 
   lazy val width = image.getWidth
   lazy val height = image.getHeight
