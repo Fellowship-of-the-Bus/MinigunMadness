@@ -36,7 +36,7 @@ class Game extends lib.game.Game with TimerListener {
     }
   }
 
-  addTimer(new TickTimer(240, cleanup _, RepeatForever))
+  add(new TickTimer(240, cleanup _, RepeatForever))
 
   //var projectiles = List[Projectile]()
 
@@ -47,7 +47,7 @@ class Game extends lib.game.Game with TimerListener {
 
 
   def update(gc: GameContainer, game: StateBasedGame, delta: Int) = {
-    super.update(delta)
+    super.tick(delta)
 
     for (bullet <- bulletList.filter(_.active)) {
       // val (dx, dy) = collision(bullet, bullet.xVel.toInt, bullet.yVel.toInt)
@@ -92,7 +92,7 @@ class Game extends lib.game.Game with TimerListener {
   def genPlatform(row: Int, column: Int) = {
     val typeNum = rand(4)
     val platformType = typeNum match {
-      case 0 => 
+      case 0 =>
        TetrisI
       case 1 =>
        TetrisJ
