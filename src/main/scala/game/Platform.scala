@@ -23,7 +23,7 @@ case object TetrisI extends platformType
 case object TetrisJ extends platformType
 
 object Platform {
-  def apply(xc: Int, yc: Int, shape: platformType, rotation: Int) = {
+  def apply(xc: Float, yc: Float, shape: platformType, rotation: Int) = {
     val platform = shape match {
       case TetrisI =>
         new PlatformI(xc, yc, rotation)
@@ -40,11 +40,11 @@ object Platform {
   }
 }
 
-abstract class Platform(xc: Int, yc: Int, var rotation: Int) extends GameObject(xc, yc) {
+abstract class Platform(xc: Float, yc: Float, var rotation: Int) extends GameObject(xc, yc) {
   // for now
   def width = GameConfig.Width/5
   def height = width
-  def velocity = (0,0)
+  def velocity = (0,1)
 
   def cellWidth = width/5
   def cellHeight = height/5
@@ -56,10 +56,14 @@ abstract class Platform(xc: Int, yc: Int, var rotation: Int) extends GameObject(
     initialMesh.addPoint(cellWidth*topLeftX, cellHeight*topLeftY)
   }
 
-  def draw(g: Graphics) = {
+  def init() {
+    image.scaleFactor = width/500
     image.setCenterOfRotation(width/2, height/2)
     image.setRotation(rotation)
-    image.draw(x, y, width, height)
+  }
+
+  def draw(g: Graphics) = {
+    image.draw(x, y)
 
     // var (prevx, prevy): (Float, Float) = (-1,-1)
     // for (i <- 0 until mesh.getPointCount()) {
@@ -122,7 +126,7 @@ abstract class Platform(xc: Int, yc: Int, var rotation: Int) extends GameObject(
   }
 }
 
-class PlatformI(xc: Int, yc: Int, rot: Int) extends Platform(xc, yc, rot) {
+class PlatformI(xc: Float, yc: Float, rot: Int) extends Platform(xc, yc, rot) {
 
   addMeshPoint(1, 2)
   addMeshPoint(4, 2)
@@ -134,9 +138,10 @@ class PlatformI(xc: Int, yc: Int, rot: Int) extends Platform(xc, yc, rot) {
 
   val regionImage = images(IBlock).copy()
   override def image = regionImage
+  init()
 }
 
-class PlatformJ(xc: Int, yc: Int, rot: Int) extends Platform(xc, yc, rot) {
+class PlatformJ(xc: Float, yc: Float, rot: Int) extends Platform(xc, yc, rot) {
 
   addMeshPoint(1, 2)
   addMeshPoint(2, 2)
@@ -150,9 +155,10 @@ class PlatformJ(xc: Int, yc: Int, rot: Int) extends Platform(xc, yc, rot) {
 
   val regionImage = images(JBlock).copy()
   override def image = regionImage
+  init()
 }
 
-class PlatformL(xc: Int, yc: Int, rot: Int) extends Platform(xc, yc, rot) {
+class PlatformL(xc: Float, yc: Float, rot: Int) extends Platform(xc, yc, rot) {
 
   addMeshPoint(1, 3)
   addMeshPoint(3, 3)
@@ -166,9 +172,10 @@ class PlatformL(xc: Int, yc: Int, rot: Int) extends Platform(xc, yc, rot) {
 
   val regionImage = images(LBlock).copy()
   override def image = regionImage
+  init()
 }
 
-class PlatformT(xc: Int, yc: Int, rot: Int) extends Platform(xc, yc, rot) {
+class PlatformT(xc: Float, yc: Float, rot: Int) extends Platform(xc, yc, rot) {
 
   addMeshPoint(2, 1)
   addMeshPoint(3, 1)
@@ -184,4 +191,5 @@ class PlatformT(xc: Int, yc: Int, rot: Int) extends Platform(xc, yc, rot) {
 
   val regionImage = images(TBlock).copy()
   override def image = regionImage
+  init()
 }

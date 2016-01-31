@@ -21,6 +21,6 @@ abstract class GameObject(var x: Float, var y: Float) extends TopLeftCoordinates
   def move() = {
     val (dx, dy) = velocity
     x = x + dx
-    x = y + dy
+    y = y + dy
   }
 }
