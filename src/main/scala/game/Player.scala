@@ -43,10 +43,14 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
     case _ => List(images(Player1Jetpack), images(Player2Jetpack))
   }
 
+  {
+    val scaleFactor = Width/(25f * 800f)
+    imageList(0).scaleFactor = scaleFactor
+    imageList(1).scaleFactor = scaleFactor
+  }
+
   var imageIndex = 0
 
-  imageList(0).scaleFactor = Width/(25f * 800f)
-  imageList(1).scaleFactor = Width/(25f * 800f)
   def image = imageList(imageIndex)
 
   def maxHp = base.maxHp
@@ -59,6 +63,8 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
   var fuel: Float = base.maxFuel
   def jetpackSpeed = base.jetpackSpeed
   var jetpackOn = false
+  def fuelConsumption = base.fuelConsumption
+  def fuelRecovery = base.fuelRecovery
   def jetpackVelocity: (Float, Float) = {
     if (fuel > 0) {
       (jetpackSpeed, jetpackSpeed)
@@ -66,6 +72,7 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
       velocity
     }
   }
+  def jetpackActive = jetpackOn && fuel >= fuelConsumption
 
   var shooting = false
 
@@ -90,10 +97,11 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
 
   def update(delta: Int) = {
     val amt =
-      if (jetpackOn) -base.fuelConsumption
-      else base.fuelRecovery
+      if (jetpackActive) -fuelConsumption
+      else fuelRecovery
+
     fuel = clamp(fuel+amt, 0, maxFuel)
-    if (fuel == 0) imageIndex = 0
+    if (jetpackOn && fuel < fuelConsumption) imageIndex = 0
     image.update(delta)
   }
 

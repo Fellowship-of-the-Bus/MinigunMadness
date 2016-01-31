@@ -94,7 +94,6 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
         val player = g.playerList(controller)
         if (button == BUTTON_LB) {
           player.jetpackOn = true
-          if (player.fuel > 0) player.imageIndex = 1
         }
         if (button == BUTTON_RB) {
           player.shooting = true
@@ -111,7 +110,6 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
         player.imageIndex = 0
       }
       if (button == BUTTON_RB) {
-
         player.shooting = false
       }
     }
@@ -139,6 +137,8 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
     if (!gc.isPaused) {
       for ((cnum,pnum) <- controllers) {
         val p = g.playerList(pnum)
+        if (p.jetpackActive) p.imageIndex = 1
+
         val (xvel, yvel) =
           if (p.jetpackOn) p.jetpackVelocity
           else p.velocity
