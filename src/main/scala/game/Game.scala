@@ -40,7 +40,8 @@ class Game extends lib.game.Game with TimerListener {
   def setPlayers(nplayers: Int) = {
     playerList = new Array[Player](nplayers)
     for (i <- 0 until nplayers) {
-      playerList(i) = new Player((0.25f + i) * areaDimension, areaDimension, players(HumanPlayer), i)
+      playerList(i) = new Player((0.25f + i) * areaDimension,
+       areaDimension.toFloat * (1f + (-0.5f*(i % 2))), players(HumanPlayer), i)
     }
   }
 
