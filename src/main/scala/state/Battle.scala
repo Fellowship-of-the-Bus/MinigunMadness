@@ -42,8 +42,9 @@ object Battle extends BasicGameState {
     }
   }
   val background = images(Background)
+  background.scaleFactor = Width/ background.width
   def render(gc: GameContainer, sbg: StateBasedGame, g: Graphics) = {
-    background.draw(0,0,Width,Height)
+    background.draw(0,0)
     ui.render(gc, sbg, g)
 
     for (player <- game.playerList) {
