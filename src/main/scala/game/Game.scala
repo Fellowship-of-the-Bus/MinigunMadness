@@ -149,5 +149,6 @@ class Game extends lib.game.Game with TimerListener {
     for (p <- playerList; if (p.active)) {
       winner = p.num
     }
+    if (winner == -1) winner = maxPlayers
   }
 }

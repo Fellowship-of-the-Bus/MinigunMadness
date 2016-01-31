@@ -18,7 +18,8 @@ object Battle extends BasicGameState {
       new Color(255, 0, 0, alpha),
       new Color(0, 0, 255, alpha),
       new Color(0, 255, 0, alpha),
-      new Color(255, 255, 255, alpha)
+      new Color(255, 255, 255, alpha),
+      new Color(0, 0, 0, alpha) // draw
     )
   }
 
@@ -63,7 +64,7 @@ object Battle extends BasicGameState {
 
     for (player <- game.playerList) {
       val alivePlayers = game.playerList.filter(_.active).length
-      if (alivePlayers == 1) {
+      if (alivePlayers <= 1) {
         game.gameOver()
       }
 
