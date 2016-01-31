@@ -1,27 +1,31 @@
 package com.github.fellowship_of_the_bus
 package mgm
 package state
-import org.newdawn.slick.{AppGameContainer, GameContainer, Graphics, SlickException, Color, Input}
+import org.newdawn.slick.{AppGameContainer, GameContainer, Graphics, SlickException, Color, Input, TrueTypeFont}
 import org.newdawn.slick.state.{BasicGameState, StateBasedGame}
+import java.awt.Font
 
 import game._
 import lib.ui.{Image,Pane}
 import lib.game.GameConfig.{Width,Height}
 import ui._
 
+
 object Battle extends BasicGameState {
   var game: Game = null
 
-  val playerColor = {
-    val alpha = (0.5 * 255).asInstanceOf[Int]
-    Array(
-      new Color(255, 0, 0, alpha),
-      new Color(0, 0, 255, alpha),
-      new Color(0, 255, 0, alpha),
-      new Color(255, 255, 255, alpha),
-      new Color(0, 0, 0, alpha) // draw
-    )
-  }
+  val font = new TrueTypeFont(new Font("Verdana", Font.BOLD, 20), true)
+
+  val playerColor = Array(
+    new Color(255, 0, 0),
+    new Color(0, 0, 255),
+    new Color(0, 255, 0),
+    new Color(255, 255, 255),
+    new Color(0, 0, 0) // draw
+  )
+  val tint = new Color(255, 255, 255, (0.5 * 255).asInstanceOf[Int])
+
+  var score = Array[Int]()
 
   var ui: Pane = null
 
@@ -64,8 +68,11 @@ object Battle extends BasicGameState {
 
     for (player <- game.playerList) {
       val alivePlayers = game.playerList.filter(_.active).length
-      if (alivePlayers <= 1) {
+      if (alivePlayers <= 1 && ! game.isGameOver) {
         game.gameOver()
+        if (game.winner != game.maxPlayers) {
+          score(game.winner) += 1
+        }
       }
 
       player.draw()
@@ -77,8 +84,12 @@ object Battle extends BasicGameState {
       bullet.draw(g)
     }
 
+    for (idx <- 0 until score.length) {
+      font.drawString(idx*Width/4, 0, s"${score(idx)}", playerColor(idx))
+    }
+
     if (game.isGameOver) {
-      g.setColor(playerColor(game.winner))
+      g.setColor(playerColor(game.winner).multiply(tint))
       g.fillRect(0, 0, Width, Height)
       // images(GameOverID).draw(0,0)
     }
@@ -86,6 +97,7 @@ object Battle extends BasicGameState {
 
   def init(gc: GameContainer, sbg: StateBasedGame) = {
     reset(gc, sbg)
+    score = new Array[Int](game.playerList.length)
   }
 
   def reset(gc: GameContainer, sbg: StateBasedGame) = {
