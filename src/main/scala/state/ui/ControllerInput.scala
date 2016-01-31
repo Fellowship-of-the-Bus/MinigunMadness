@@ -153,7 +153,7 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
         if (angle < 0) angle += 360
         p.gunAngle = angle.toFloat;
 
-        if (p.shooting) g.bulletList = g.playerList(pnum).shoot()::g.bulletList
+        if (p.shooting && p.active) g.bulletList = g.playerList(pnum).shoot()::g.bulletList
 
       }
 

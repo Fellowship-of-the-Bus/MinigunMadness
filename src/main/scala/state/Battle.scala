@@ -42,6 +42,11 @@ object Battle extends BasicGameState {
       // images(GameOverID).draw(0,0)
     }
     for (player <- game.playerList) {
+      val alivePlayers = game.playerList.filter(_.active).length
+      if (alivePlayers == 1) {
+        game.isGameOver = true
+      }
+      
       player.draw()
     }
     for (platform <- game.platformList) {
