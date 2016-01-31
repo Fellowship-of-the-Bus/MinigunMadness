@@ -100,16 +100,18 @@ class Game extends lib.game.Game with TimerListener {
   }
 
   def genPlatform(column: Int, row: Int) = {
-    val typeNum = rand(4)
+    val typeNum = rand(5)
     val platformType = typeNum match {
       case 0 =>
-       TetrisI
+        TetrisI
       case 1 =>
-       TetrisJ
+        TetrisJ
       case 2 =>
-       TetrisL
+        TetrisL
       case 3 =>
-       TetrisT
+        TetrisT
+      case 4 =>
+        TetrisEmpty
     }
     Platform(column * areaDimension,
      (row + colOffsets(column)) * areaDimension,

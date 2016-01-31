@@ -21,6 +21,7 @@ case object TetrisZ extends platformType
 case object TetrisO extends platformType
 case object TetrisI extends platformType
 case object TetrisJ extends platformType
+case object TetrisEmpty extends platformType
 
 object Platform {
   def apply(xc: Float, yc: Float, shape: platformType, rotation: Int) = {
@@ -33,6 +34,8 @@ object Platform {
         new PlatformL(xc, yc, rotation)
       case TetrisT =>
         new PlatformT(xc, yc, rotation)
+      case TetrisEmpty =>
+        new PlatformEmpty(xc, yc, rotation)
       case _ =>
         new PlatformI(xc, yc, rotation)
     }
@@ -192,4 +195,14 @@ class PlatformT(xc: Float, yc: Float, rot: Int) extends Platform(xc, yc, rot) {
   val regionImage = images(TBlock).copy()
   override def image = regionImage
   init()
+}
+
+class PlatformEmpty(xc: Float, yc: Float, rot: Int) extends Platform(xc, yc, rot) {
+  //single point mesh because apparently empty mesh does not work
+  addMeshPoint(0, 0)
+  override def mesh = initialMesh
+  init()
+  override def draw(g:Graphics) = {}
+  override def image = images(TBlock).copy()
+
 }
