@@ -151,8 +151,10 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
         val (xvel, yvel) =
           if (p.jetpackOn) p.jetpackVelocity
           else p.velocity
-        val dx = (xvel * input.getAxisValue(cnum,AXIS_X)).toInt
-        val dy = (yvel * input.getAxisValue(cnum,AXIS_Y)).toInt
+        val dx = (xvel * input.getAxisValue(cnum,AXIS_X))
+        val dy =
+          if (p.jetpackActive) (yvel * input.getAxisValue(cnum,AXIS_Y))
+          else 0
         val (minx,miny) = g.collision(p,dx,dy)
         p.move(minx, miny)
         p.onBlock = (miny < dy)
@@ -171,7 +173,7 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
         // support single player if there are no controllers attached
         val p = g.playerList(0)
         val (xvel, yvel) = p.velocity
-        val (minx, miny) = g.collision(p,(xvel * horizontal).toInt, (yvel * vertical).toInt)
+        val (minx, miny) = g.collision(p,(xvel * horizontal), (yvel * vertical))
         p.move(minx, miny)
         p.gunAngle += clockwise * 1
         p.gunAngle = ( p.gunAngle + 360 )% 360

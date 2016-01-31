@@ -78,7 +78,7 @@ abstract class Platform(xc: Int, yc: Int, var rotation: Int) extends GameObject(
   }
 
   //given a game object + velocity and returns an allowable velocity vector
-  def collision(gameObject: GameObject, velocity: (Int, Int)): (Int, Int) = {
+  def collision(gameObject: GameObject, velocity: (Float, Float)): (Float, Float) = {
     val (dx, dy) = velocity
     // normalize gameObject to this region
     val (gx, gy) = (gameObject.x - x, gameObject.y - y)
@@ -90,9 +90,10 @@ abstract class Platform(xc: Int, yc: Int, var rotation: Int) extends GameObject(
       return (dx, dy)
     }
     // binary search x to see get max x movment
+    val tolerance = 0.01f
     var lowerBound = 0f
     var upperBound = 1f
-    while (upperBound - lowerBound > 0.1) {
+    while (upperBound - lowerBound > tolerance) {
       translatedgMesh = gameObject.mesh.transform(Transform.createTranslateTransform(gx + dx*(lowerBound+upperBound)/2, gy))
       if (mesh.intersects(translatedgMesh)) {
         upperBound = (lowerBound+upperBound).toFloat/2f
@@ -100,11 +101,13 @@ abstract class Platform(xc: Int, yc: Int, var rotation: Int) extends GameObject(
         lowerBound = (lowerBound+upperBound).toFloat/2f
       }
     }
-    val allowabledx = dx*(lowerBound + upperBound)/2
+    val allowabledx =
+      if ((lowerBound + upperBound)/2 < tolerance) 0f
+      else dx*(lowerBound + upperBound)/2
     //binary search to get max y movement
     lowerBound = 0
     upperBound = 1
-    while (upperBound - lowerBound > 0.1) {
+    while (upperBound - lowerBound > tolerance) {
       translatedgMesh = gameObject.mesh.transform(Transform.createTranslateTransform(gx + allowabledx,  gy + dy*(lowerBound+upperBound)/2))
       if (mesh.intersects(translatedgMesh)) {
         upperBound = (lowerBound+upperBound).toFloat/2f
@@ -112,8 +115,10 @@ abstract class Platform(xc: Int, yc: Int, var rotation: Int) extends GameObject(
         lowerBound = (lowerBound+upperBound).toFloat/2f
       }
     }
-    val allowabledy = dy*(lowerBound + upperBound)/2
-    return (allowabledx.toInt, allowabledy.toInt)
+    val allowabledy =
+      if ((lowerBound + upperBound)/2 < tolerance) 0f
+      else dy*(lowerBound + upperBound)/2
+    return (allowabledx, allowabledy)
   }
 }
 

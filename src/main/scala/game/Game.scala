@@ -83,11 +83,11 @@ class Game extends lib.game.Game with TimerListener {
     }*/
   }
 
-  def collision(go: GameObject, dx: Int, dy: Int) = {
+  def collision(go: GameObject, dx: Float, dy: Float) = {
     var minx = dx
     var miny = dy
     for (platform <- platformList) {
-      val (vx, vy): (Int, Int) = platform.collision(go, (dx, dy))
+      val (vx, vy): (Float, Float) = platform.collision(go, (dx, dy))
       if (abs(vx) < abs(minx)) {
         minx = vx
       }

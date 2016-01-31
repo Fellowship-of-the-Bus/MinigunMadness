@@ -125,10 +125,12 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
     fuel = clamp(fuel+amt, 0, maxFuel)
     if (jetpackOn && fuel < fuelConsumption) imageIndex = 0
     image.update(delta)
-    if (!onBlock && !jetpackOn) {
-      val (minx,miny) = g.collision(this,0,yvel.toInt)
-      //if (miny < yvel) onBlock = true
-      move(0,miny)
+    if (!onBlock && !jetpackActive) {
+      val (minx,miny) = g.collision(this,0,yvel)
+      if (miny < yvel) {
+        onBlock = true
+      }
+      else move(0,miny)
     }
   }
 
