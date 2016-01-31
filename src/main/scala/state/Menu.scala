@@ -20,9 +20,11 @@ object Menu extends BasicGameState {
   implicit var input: Input = null
   implicit var SBGame: StateBasedGame = null
 
+  var keyboardPlayer = false
+
   lazy val choices = List(
     Button("New Game (A/X)", centerx, Height/2, () => SBGame.enterState(Mode.BattleID)),
-    // Button("Options", centerx, Height/2+30, () => SBGame.enterState(Mode.OptionsID)),
+    Button("Toggle Keyboard Player", centerx, Height/2+30, () => keyboardPlayer = !keyboardPlayer),
     Button("Quit (B/O)", centerx, Height/2+60, () => System.exit(0)))
 
   def update(gc: GameContainer, game: StateBasedGame, delta: Int) = {

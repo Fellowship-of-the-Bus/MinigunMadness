@@ -75,7 +75,11 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
     input.addKeyListener(this)
     g.setPlayers(1)
   } else {
-    g.setPlayers(controllers.length)
+    if (Menu.keyboardPlayer) {
+      g.setPlayers(controllers.length + 1)
+    } else {
+      g.setPlayers(controllers.length)
+    }
   }
 
   override def controllerButtonPressed(controller: Int, button: Int) = {
@@ -173,9 +177,9 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
 
       }
 
-      if (controllers.length == 0) {
+      if (controllers.length == 0 || Menu.keyboardPlayer) {
         // support single player if there are no controllers attached
-        val p = g.playerList(0)
+        val p = g.playerList(controllers.length)
         val (xvel, yvel) = p.velocity
         val dy =
           if (p.jetpackActive) yvel
@@ -185,6 +189,24 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
         p.onBlock = (miny < (yvel * vertical))
         p.gunAngle += clockwise * 1
         p.gunAngle = ( p.gunAngle + 360 )% 360
+
+        val xVec = input.getMouseX - p.x
+        val yVec = input.getMouseY - p.y
+
+        val anglex = xVec / math.sqrt((xVec*xVec) + (yVec*yVec))
+        val angley = yVec / math.sqrt((xVec*xVec) + (yVec*yVec))
+        if (anglex != 0 || angley != 0) {
+          var angle = toDegrees(atan2(anglex,angley)) - 90
+          if (angle < 0) angle += 360
+
+          val diff = angle - p.gunAngle
+          if (diff > 0 && diff < 180 || diff > -360 && diff < -180) p.gunAngle += p.gunTurnRate
+          else p.gunAngle -= p.gunTurnRate
+          p.gunAngle = (p.gunAngle + 360) % 360
+        }
+
+        p.shooting = input.isMouseButtonDown(0)
+        if (p.shooting && p.active) g.bulletList = p.shoot()::g.bulletList
       }
     }
   }
@@ -195,23 +217,20 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
   override def keyPressed(key: Int, c: Char) = {
     key match {
       // movement
-      case Input.KEY_LEFT => horizontal += -1
-      case Input.KEY_RIGHT => horizontal += 1
-      case Input.KEY_UP => vertical += -1
-      case Input.KEY_DOWN => vertical += 1
+      case Input.KEY_A => horizontal += -1
+      case Input.KEY_D => horizontal += 1
+      case Input.KEY_W => vertical += -1
+      case Input.KEY_S=> vertical += 1
 
       // pause/unpause
       case Input.KEY_P => gc.setPaused(!gc.isPaused)
 
-      //shoot
-      case Input.KEY_SPACE => g.bulletList = g.playerList(0).shoot()::g.bulletList
+      //jetpack
+      case Input.KEY_SPACE => g.playerList(0).jetpackOn = true
 
       //rotate gun
       case Input.KEY_E => clockwise = 1
       case Input.KEY_R => clockwise = -1
-
-      //jetpack
-      case Input.KEY_RCONTROL => g.playerList(0).jetpackOn = true
 
       case _ => clockwise = 0
     }
@@ -242,10 +261,11 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
 
   override def keyReleased(key: Int, c: Char) = {
     key match {
-      case Input.KEY_LEFT => horizontal -= -1
-      case Input.KEY_RIGHT => horizontal -= 1
-      case Input.KEY_UP => vertical -= -1
-      case Input.KEY_DOWN => vertical -= 1
+      case Input.KEY_A => horizontal -= -1
+      case Input.KEY_D => horizontal -= 1
+      case Input.KEY_W => vertical -= -1
+      case Input.KEY_S => vertical -= 1
+      case Input.KEY_SPACE => g.playerList(0).jetpackOn = false
       case _ => ()
     }
   }
