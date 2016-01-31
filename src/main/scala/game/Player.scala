@@ -123,7 +123,6 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
 
       minigun.setRotation(-gunAngle)
       minigun.draw(x + image.width/2 - minigun.width*1f/5f, y + image.height/2 - minigun.height/2)
-
     }
   }
 
@@ -136,7 +135,7 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
     if (jetpackOn && fuel < fuelConsumption) imageIndex = 0
     image.update(delta)
     if (!onBlock && !jetpackActive) {
-      val (minx,miny) = g.collision(this,0,yvel)
+      val (_,miny) = g.collision(this,0,yvel)
       if (miny < yvel) {
         onBlock = true
       }
@@ -145,8 +144,7 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
   }
 
   def shoot() = {
-    var (additionalx, additionaly) = (minigun.width*4f/5f * cos((-gunAngle*Pi)/180f), minigun.width* 4f/5f*sin((-gunAngle*Pi)/180f))
-    additionalx -= width/2f
+    val (additionalx, additionaly) = (minigun.width*4f/5f * cos((-gunAngle*Pi)/180f) - width/2f, minigun.width* 4f/5f*sin((-gunAngle*Pi)/180f))
     new Bullet((x + width/2f + additionalx).toInt, (y + height/2f + additionaly).toInt, gunAngle, num)
   }
 
