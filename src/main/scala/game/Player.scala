@@ -98,7 +98,7 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
     y += yamt
     x = clamp(x, 0, Width-width)
     y = clamp(y, 0, Height-height)
-    if (!onBlock && !jetpackOn) {
+    if (!onBlock && !jetpackActive) {
       yvel += GravityAcceleration
     } else {
       yvel = 0f

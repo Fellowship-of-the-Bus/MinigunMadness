@@ -149,12 +149,12 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
         if (p.jetpackActive) p.imageIndex = 1
 
         val (xvel, yvel) =
-          if (p.jetpackOn) p.jetpackVelocity
+          if (p.jetpackActive) p.jetpackVelocity
           else p.velocity
         val dx = (xvel * input.getAxisValue(cnum,AXIS_X))
         val dy =
           if (p.jetpackActive) (yvel * input.getAxisValue(cnum,AXIS_Y))
-          else 0
+          else 0f
         val (minx,miny) = g.collision(p,dx,dy)
         p.move(minx, miny)
         p.onBlock = (miny < dy)
