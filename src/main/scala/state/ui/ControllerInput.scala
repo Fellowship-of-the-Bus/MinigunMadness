@@ -92,11 +92,19 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
         }
       } else if (sbg.getCurrentStateID == Mode.BattleID) {
         val player = g.playerList(controller)
-        if (button == BUTTON_LB) {
-          player.jetpackOn = true
+        if (player.active) {
+          if (button == BUTTON_LB) {
+            player.jetpackOn = true
+          }
+          if (button == BUTTON_RB) {
+            player.shooting = true
+          }
         }
-        if (button == BUTTON_RB) {
-          player.shooting = true
+        if (g.isGameOver) {
+          if (button == BUTTON_BACK) {
+            sbg.enterState(Mode.MenuID)
+            Battle.reset(gc, sbg)
+          }
         }
       }
     }

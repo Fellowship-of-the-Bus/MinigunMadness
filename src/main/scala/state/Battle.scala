@@ -10,7 +10,7 @@ import lib.game.GameConfig.{Width,Height}
 import ui._
 
 object Battle extends BasicGameState {
-  var game = new Game
+  var game: Game = null
 
   val playerColor = {
     val alpha = (0.5 * 255).asInstanceOf[Int]
@@ -22,7 +22,7 @@ object Battle extends BasicGameState {
     )
   }
 
-  val ui = new Pane(0, 0, 0, 0)(Color.white)
+  var ui: Pane = null
 
   var controllerInput: ControllerInput = null
 
@@ -68,6 +68,12 @@ object Battle extends BasicGameState {
   }
 
   def init(gc: GameContainer, sbg: StateBasedGame) = {
+    reset(gc, sbg)
+  }
+
+  def reset(gc: GameContainer, sbg: StateBasedGame) = {
+    game = new Game
+    ui = new Pane(0, 0, 0, 0)(Color.white)
     controllerInput = new ControllerInput(game, gc, sbg)
     ui.addChildren(game.playerList.toList.map(new PlayerHUD(_)))
     ui.setState(getID)
