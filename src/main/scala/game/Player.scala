@@ -78,24 +78,35 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
 
   lazy val height = image.getHeight
   lazy val width = image.getWidth
-  def velocity: (Float, Float) = (speed, speed)
+  var xvel = speed
+  var yvel = 0f
+  def velocity: (Float, Float) = (xvel, yvel)
 
   val shape = new Rectangle(0,0,width,height)
   def facingRight = (gunAngle <= 90 || gunAngle >= 270)
   def mesh = shape
 
+  var onBlock = false
+
+  val GravityAcceleration = 0.1f
+
   def move(xamt: Float, yamt: Float) = {
-     x += xamt
-     y += yamt
-     x = clamp(x, 0, Width-width)
-     y = clamp(y, 0, Height-height)
+    x += xamt
+    y += yamt
+    x = clamp(x, 0, Width-width)
+    y = clamp(y, 0, Height-height)
+    if (!onBlock && !jetpackOn) {
+      yvel += GravityAcceleration
+    } else {
+      yvel = 0f
+    }
   }
 
   def draw() = {
     if (active) image.draw(x,y,facingRight)
   }
 
-  def update(delta: Int) = {
+  def update(delta: Int, g: Game) = {
     val amt =
       if (jetpackActive) -fuelConsumption
       else fuelRecovery
@@ -103,6 +114,11 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
     fuel = clamp(fuel+amt, 0, maxFuel)
     if (jetpackOn && fuel < fuelConsumption) imageIndex = 0
     image.update(delta)
+    if (!onBlock && !jetpackOn) {
+      val (minx,miny) = g.collision(this,0,yvel.toInt)
+      //if (miny < yvel) onBlock = true
+      move(0,miny)
+    }
   }
 
   def shoot() = {

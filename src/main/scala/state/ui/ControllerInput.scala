@@ -146,6 +146,7 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
         val dy = (yvel * input.getAxisValue(cnum,AXIS_Y)).toInt
         val (minx,miny) = g.collision(p,dx,dy)
         p.move(minx, miny)
+        p.onBlock = (miny < dy)
 
         val anglex = input.getAxisValue(cnum, RIGHT_AXIS_X)
         val angley = input.getAxisValue(cnum, RIGHT_AXIS_Y)

@@ -34,7 +34,7 @@ object Battle extends BasicGameState {
         controllerInput.update()
       }
       for(p <- game.playerList) {
-        p.update(delta)
+        p.update(delta,game)
       }
       for(bullet <- game.bulletList) {
         bullet.move()
