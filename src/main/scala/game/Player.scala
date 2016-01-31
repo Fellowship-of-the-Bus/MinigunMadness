@@ -26,6 +26,7 @@ case class PlayerAttributes(
   jetpackSpeed: Float,
   fuelConsumption: Float,
   fuelRecovery: Float,
+  fuelThreshold: Float,       // Amount of fuel required to turn on jetpack
   gunTurnRate: Float,         // angle/frame that gun changes while not shooting
   shotGunTurnRate: Float      // angle/frame that gun changes while shooting
 )
@@ -80,11 +81,15 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
   var jetpackOn = false
   def fuelConsumption = base.fuelConsumption
   def fuelRecovery = base.fuelRecovery
+  def fuelThreshold = base.fuelThreshold
+
   private def jetpackVelocity: (Float, Float) = {
     val v = jetpackSpeed*shotMoveSpeedPenalty
     (v, v)
   }
-  def jetpackActive = jetpackOn && fuel >= fuelConsumption
+
+  var prevJetpackActive = false
+  def jetpackActive = ((prevJetpackActive && jetpackOn && fuel >= fuelConsumption) || (jetpackOn && fuel >= fuelThreshold))
 
   var shooting = false
 
@@ -134,7 +139,8 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
       else fuelRecovery
 
     fuel = clamp(fuel+amt, 0, maxFuel)
-    if (jetpackOn && fuel < fuelConsumption) imageIndex = 0
+    if (jetpackActive) imageIndex = 0
+    prevJetpackActive = jetpackActive
     image.update(delta)
     if (!onBlock && !jetpackActive) {
       val (_,miny) = g.collision(this,0,yvel)
