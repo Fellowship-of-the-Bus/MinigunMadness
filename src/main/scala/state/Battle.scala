@@ -6,7 +6,7 @@ import org.newdawn.slick.state.{BasicGameState, StateBasedGame}
 import java.awt.Font
 
 import game._
-import lib.ui.{Image,Pane}
+import lib.slick2d.ui.{Image,Pane}
 import lib.game.GameConfig.{Width,Height}
 import ui._
 

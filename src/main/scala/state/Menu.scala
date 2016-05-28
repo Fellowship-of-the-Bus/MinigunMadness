@@ -2,7 +2,7 @@ package com.github.fellowship_of_the_bus
 package mgm
 package state
 
-import lib.ui.{Button, ToggleButton}
+import lib.slick2d.ui.{Button, ToggleButton}
 import lib.game.GameConfig
 import lib.game.GameConfig.{Width,Height}
 

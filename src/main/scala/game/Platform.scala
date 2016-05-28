@@ -11,7 +11,7 @@ import lib.util.Native
 import lib.game.GameConfig
 import lib.game.TopLeftCoordinates
 
-import lib.ui._
+import lib.slick2d.ui._
 
 trait platformType
 case object TetrisL extends platformType

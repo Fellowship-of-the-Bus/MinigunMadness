@@ -6,7 +6,7 @@ package ui
 import org.newdawn.slick.{AppGameContainer, GameContainer, Graphics, SlickException, Color, Input}
 import org.newdawn.slick.state.{BasicGameState, StateBasedGame}
 
-import lib.ui.{UIElement,AbstractUIElement}
+import lib.slick2d.ui.{UIElement,AbstractUIElement}
 
 import mgm.game.{GameObject,Player}
 

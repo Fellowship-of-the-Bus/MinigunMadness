@@ -10,7 +10,7 @@ import lib.util.rand
 import lib.util.{TickTimer,TimerListener,RepeatForever}
 import scala.math.abs
 
-class Game extends lib.game.Game with TimerListener {
+class Game extends lib.slick2d.game.Game with TimerListener {
   val maxPlayers = 4
   var playerList: Array[Player] = null
 

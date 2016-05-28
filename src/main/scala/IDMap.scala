@@ -2,7 +2,7 @@ package com.github.fellowship_of_the_bus
 package mgm
 
 import lib.game.{IDMap, IDFactory}
-import lib.ui.{Image,Animation,Drawable}
+import lib.slick2d.ui.{Image,Animation,Drawable}
 import rapture.json._
 import rapture.json.jsonBackends.jackson._
 

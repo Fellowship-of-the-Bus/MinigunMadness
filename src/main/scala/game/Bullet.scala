@@ -5,7 +5,7 @@ package game
 import org.newdawn.slick.{GameContainer, Graphics, Color}
 import org.newdawn.slick.geom.{Rectangle, Transform}
 
-import lib.ui.{Drawable}
+import lib.slick2d.ui.{Drawable}
 import lib.game.GameConfig.{Width,Height}
 import lib.game.GameConfig
 import lib.util.{TickTimer,TimerListener,FireN}
