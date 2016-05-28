@@ -1,1 +1,22 @@
-Everything
+Fuel:
+option to have max fuel / normal fuel
+
+upgrades on screen 
+	grenade launcher
+	explosive bullets
+	shield
+	+ mvspeed or flyspeed
+	+ damage
+	+ bullets stream
+	+ gun turn rate
+	+ bullet ricochet
+	heal
+
+More modes
+capture the flag
+	moving middle section but static sides for bases
+team mode
+	+friendly fire option?
+king of the hill
+
+
