@@ -227,6 +227,10 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
       //rotate gun
       case Input.KEY_E => clockwise = 1
       case Input.KEY_R => clockwise = -1
+      case Input.KEY_ESCAPE => if (g.isGameOver) {
+            sbg.enterState(Mode.MenuID)
+            Battle.reset(gc, sbg)
+          }
 
       case _ => clockwise = 0
     }
