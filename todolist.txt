@@ -20,3 +20,9 @@ team mode
 king of the hill
 
 
+full screen mode?
+toggle keyboard player on/off display
+bugs (libraries died or something):
+	tiles spawning awkward...
+	players not drawn
+	gun not drawn correctly
