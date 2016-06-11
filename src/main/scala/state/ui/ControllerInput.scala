@@ -269,4 +269,8 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
       case _ => ()
     }
   }
+
+  def removeListeners() = {
+    input.removeListener(this)
+  }
 }

@@ -103,6 +103,7 @@ object Battle extends BasicGameState {
   def reset(gc: GameContainer, sbg: StateBasedGame) = {
     game = new Game
     ui = new Pane(0, 0, 0, 0)(Color.white)
+    if (controllerInput != null) controllerInput.removeListeners()
     controllerInput = new ControllerInput(game, gc, sbg)
     ui.addChildren(game.playerList.toList.map(new PlayerHUD(_)))
     ui.setState(getID)
