@@ -31,7 +31,6 @@ object MinigunMadness extends App {
     val appgc = new AppGameContainer(new MinigunMadness("Minigun Madness"))
     Height = (appgc.getScreenHeight * HeightPercent).toInt
     Width = (Height * AspectRatio).toInt
-    println(s"$Width, $Height")
     appgc.setDisplayMode(Width, Height, false)
     appgc.setTargetFrameRate(FrameRate)
     appgc.setVSync(true)
