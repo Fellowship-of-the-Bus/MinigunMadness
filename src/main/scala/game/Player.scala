@@ -4,6 +4,7 @@ package game
 
 import lib.game.{IDMap, IDFactory}
 import rapture.json._
+import rapture.json.jsonBackends.jackson._
 
 import org.newdawn.slick.{GameContainer, Graphics}
 import org.newdawn.slick.geom.{Rectangle}
@@ -30,6 +31,30 @@ case class PlayerAttributes(
   gunTurnRate: Float,         // angle/frame that gun changes while not shooting
   shotGunTurnRate: Float      // angle/frame that gun changes while shooting
 )
+
+object PlayerAttributes {
+  // not supposed to need this, but for some reason, the compiler isn't finding it
+  implicit lazy val extractor: Extractor[PlayerAttributes, Json] =
+    Json.extractor[Json].map {
+      case json"""{ "maxHp": $maxHp, "attack": $attack, "moveSpeed": $moveSpeed,
+        "shotMoveSpeedPenalty": $shotMoveSpeedPenalty, "maxFuel": $maxFuel,
+        "jetpackSpeed": $jetpackSpeed, "fuelRecovery": $fuelRecovery, "fuelConsumption": $fuelConsumption,
+        "fuelThreshold": $fuelThreshold, "gunTurnRate": $gunTurnRate, "shotGunTurnRate": $shotGunTurnRate }""" =>
+        PlayerAttributes(
+          maxHp.as[Float],
+          attack.as[Float],
+          moveSpeed.as[Float],
+          shotMoveSpeedPenalty.as[Float],
+          maxFuel.as[Float],
+          jetpackSpeed.as[Float],
+          fuelConsumption.as[Float],
+          fuelRecovery.as[Float],
+          fuelThreshold.as[Float],
+          gunTurnRate.as[Float],
+          shotGunTurnRate.as[Float]
+        )
+    }
+}
 
 object PlayerID {
   implicit object Factory extends IDFactory[PlayerID] {

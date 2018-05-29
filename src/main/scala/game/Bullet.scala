@@ -14,8 +14,18 @@ import scala.math._
 
 import lib.game.{IDMap, IDFactory}
 import rapture.json._
+import rapture.json.jsonBackends.jackson._
 
 case class BulletAttributes(speed: Float)
+
+object BulletAttributes {
+  // not supposed to need this, but for some reason, the compiler isn't finding it
+  implicit lazy val extractor: Extractor[BulletAttributes, Json] =
+    Json.extractor[Json].map {
+      case json"""{ "speed": $speed }""" =>
+        BulletAttributes(speed.as[Float])
+    }
+}
 
 sealed trait ProjectileID
 case object BulletProjectile extends ProjectileID
@@ -24,7 +34,7 @@ object ProjectileID {
   implicit object Factory extends IDFactory[ProjectileID] {
     val ids = Vector(BulletProjectile)
   }
-  implicit lazy val extractor =
+  implicit lazy val extractor: Extractor[ProjectileID, Json] =
     Json.extractor[String].map(Factory.fromString(_))
 }
 

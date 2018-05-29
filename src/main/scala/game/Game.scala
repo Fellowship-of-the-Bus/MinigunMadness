@@ -45,7 +45,7 @@ class Game extends lib.slick2d.game.Game with TimerListener {
     }
   }
 
-  add(new TickTimer(120, cleanup _, RepeatForever))
+  this += new TickTimer(120, cleanup _, RepeatForever)
 
   //var projectiles = List[Projectile]()
 
