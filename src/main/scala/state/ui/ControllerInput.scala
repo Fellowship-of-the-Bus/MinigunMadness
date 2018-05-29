@@ -71,7 +71,7 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
       controllers = controllers :+ ((i, controllers.length))
     }
   }
-  if (Menu.keyboardPlayer) {
+  if (Options.keyboardPlayer) {
     input.addKeyListener(this)
     g.setPlayers(controllers.length + 1)
   } else {
@@ -173,7 +173,7 @@ class ControllerInput(g: game.Game, gc: GameContainer, sbg: StateBasedGame) exte
 
       }
 
-      if (controllers.length == 0 || Menu.keyboardPlayer) {
+      if (controllers.length == 0 || Options.keyboardPlayer) {
         // support single player if there are no controllers attached
         val p = g.playerList(controllers.length)
         val (xvel, yvel) = p.velocity

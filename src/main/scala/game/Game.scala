@@ -47,10 +47,7 @@ class Game extends lib.slick2d.game.Game with TimerListener {
 
   this += new TickTimer(120, cleanup _, RepeatForever)
 
-  //var projectiles = List[Projectile]()
-
   def cleanup() = {
-    //projectiles = projectiles.filter(_.active)
     bulletList = bulletList.filter(_.active)
     platformList = platformList.filter(_.active)
   }
@@ -105,16 +102,11 @@ class Game extends lib.slick2d.game.Game with TimerListener {
   def genPlatform(column: Int, row: Int) = {
     val typeNum = rand(5)
     val platformType = typeNum match {
-      case 0 =>
-        TetrisI
-      case 1 =>
-        TetrisJ
-      case 2 =>
-        TetrisL
-      case 3 =>
-        TetrisT
-      case 4 =>
-        TetrisEmpty
+      case 0 => TetrisI
+      case 1 => TetrisJ
+      case 2 => TetrisL
+      case 3 => TetrisT
+      case 4 => TetrisEmpty
     }
     Platform(column * areaDimension,
      (row + colOffsets(column)) * areaDimension,

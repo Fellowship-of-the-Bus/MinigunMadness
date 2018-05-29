@@ -14,7 +14,8 @@ class MinigunMadness(gamename: String) extends StateBasedGame(gamename) {
     gc.setShowFPS(true)
     addState(Menu)
     addState(Battle)
-    // addState(Options)
+    addState(Settings)
+    addState(Options)
   }
 }
 
@@ -22,15 +23,26 @@ object MinigunMadness extends App {
   def makeImg(loc: String) = new Image(loc)
   GameConfig.FrameRate = 60
 
-  val HeightPercent = 0.9
-  val AspectRatio = 5.0f/4.0f
+  def calculateScreenSize(width: Int, height: Int): (Int, Int) = {
+    // calculate maximum screen size using desired aspect ratio and known width and height.
+    val aspect = 5.0f/4.0f
+
+    val newWidth = (height * aspect).toInt
+    if (width < newWidth) {
+      (width, (width/aspect).toInt)
+    } else {
+      (newWidth, height)
+    }
+  }
 
   try {
     import GameConfig._
     Native.loadLibraryFromJar()
     val appgc = new AppGameContainer(new MinigunMadness("Minigun Madness"))
-    Height = (appgc.getScreenHeight * HeightPercent).toInt
-    Width = (Height * AspectRatio).toInt
+    val HeightPercent = 0.9
+    val (w, h) = calculateScreenSize((appgc.getScreenHeight * HeightPercent).toInt, appgc.getScreenWidth)
+    Width = w
+    Height = h
     appgc.setDisplayMode(Width, Height, false)
     appgc.setTargetFrameRate(FrameRate)
     appgc.setVSync(true)

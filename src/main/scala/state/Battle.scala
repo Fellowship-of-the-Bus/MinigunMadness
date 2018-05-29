@@ -2,7 +2,7 @@ package com.github.fellowship_of_the_bus
 package mgm
 package state
 import org.newdawn.slick.{AppGameContainer, GameContainer, Graphics, SlickException, Color, Input, TrueTypeFont}
-import org.newdawn.slick.state.{BasicGameState, StateBasedGame}
+import org.newdawn.slick.state.{BasicGameState => SlickBasicGameState, StateBasedGame}
 import java.awt.Font
 
 import game._
@@ -11,7 +11,7 @@ import lib.game.GameConfig.{Width,Height}
 import ui._
 
 
-object Battle extends BasicGameState {
+object Battle extends SlickBasicGameState {
   var game: Game = null
 
   val font = new TrueTypeFont(new Font("Verdana", Font.BOLD, 20), true)
