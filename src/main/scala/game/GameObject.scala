@@ -12,8 +12,8 @@ abstract class GameObject(var x: Float, var y: Float) extends TopLeftCoordinates
 
   // generic
   private var isActive = true
-  def active = isActive
-  def inactivate() = isActive = false
+  def active: Boolean = isActive
+  def inactivate(): Unit = isActive = false
 
   def velocity: (Float, Float)
   def mesh: Shape

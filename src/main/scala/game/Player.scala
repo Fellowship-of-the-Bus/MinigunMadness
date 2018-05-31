@@ -66,7 +66,7 @@ object PlayerID {
 
 case object players extends IDMap[PlayerID, PlayerAttributes]("data/player.json")
 
-class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends GameObject(xc, yc) {
+class Player(xc: Float, yc: Float, val base: PlayerAttributes, val num: Int) extends GameObject(xc, yc) {
   val imageList = num match {
     case 0 => List(images(Player1Walk), images(Player1Jetpack))
     case 1 => List(images(Player2Walk), images(Player2Jetpack))
@@ -125,13 +125,15 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
     if (jetpackActive) jetpackVelocity
     else (speed, yvel)
 
-  val shape = new Rectangle(0,0,width,height)
   def facingRight = (gunAngle <= 90 || gunAngle >= 270)
-  def mesh = shape
+  val mesh = new Rectangle(0,0,width,height)
 
   var onBlock = false
 
   val GravityAcceleration = 0.1f
+
+  // player num for player that hit this most recently
+  var mostRecentAttacker: Int = -1
 
   def move(xamt: Float, yamt: Float) = {
     x += xamt
@@ -181,10 +183,20 @@ class Player(xc: Float, yc: Float, base: PlayerAttributes, val num: Int) extends
     new Bullet((x + width/2f + additionalx).toInt, (y + height/2f + additionaly).toInt, gunAngle, num)
   }
 
-  def takeDamage(damage: Int) = {
-    hp -= damage
+  def takeDamage(bullet: Bullet) = {
+    mostRecentAttacker = bullet.playerNum
+    hp -= bullet.damage
     if (hp <= 0) {
       inactivate
+    }
+  }
+
+  // callback upon death of character
+  var onDeath = (player: Player) => ()
+  override def inactivate(): Unit = {
+    if (active) {
+      super.inactivate()
+      onDeath(this)
     }
   }
 }

@@ -46,6 +46,7 @@ class Bullet(xc: Float, yc: Float, angle: Float, var playerNum: Int) extends Gam
   val speed = base.speed
   val xVel = speed * math.cos(rad).toFloat
   val yVel = speed * math.sin(rad).toFloat
+  val damage = 1
 
   val image = images(Bullet).copy
   image.scaleFactor = 0.1f

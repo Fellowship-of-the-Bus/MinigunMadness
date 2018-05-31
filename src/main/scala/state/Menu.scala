@@ -97,7 +97,7 @@ class ModeButton(title: String, modes: List[ModeButton.Mode], val x: Float, val 
 object Menu extends BasicGameState {
   lazy val choices = List(
     Button("New Game (A/X)", centerx, startY, () => SBGame.enterState(Mode.BattleID)),
-    Button("Options", centerx, startY+padding, () => SBGame.enterState(Mode.OptionsID))),
+    Button("Options", centerx, startY+padding, () => SBGame.enterState(Mode.OptionsID)),
     Button("Quit (B/O)", centerx, startY+2*padding, () => System.exit(0)))
 
   override def render(gc: GameContainer, game: StateBasedGame, g: Graphics) = {
@@ -112,26 +112,15 @@ object Menu extends BasicGameState {
 
 // pre-battle settings screen to toggle options
 object Settings extends BasicGameState {
-  val respawnDelay = 60*5 // delay of 5 seconds
+  var doRespawn = true
+  var maxScore  = 99
+  var stock = Double.PositiveInfinity
 
-  var respawn = 0
-
-  lazy val choices = {
-    import ModeButton.Mode
-    List(
-      ModeButton("Respawn Mode: ",
-        List(
-          Mode("Immediate", () => respawn = 0),
-          Mode("Delay", () => respawn = respawnDelay),
-          Mode("Round", () => respawn = -1)), centerx, startY),
-      ModeButton("Player 1",
-        List(
-          Mode("Keyboard", () => ()),
-        ), centerx, startY+padding),
-      Button("Start Game", centerx, startY+5*padding, () => SBGame.enterState(mgm.Mode.BattleID)),
-      Button("Back", centerx, startY+6*padding, () => SBGame.enterState(mgm.Mode.MenuID))
-    )
-  }
+  lazy val choices = List(
+    Button("Respawn Mode: ", centerx, startY, () => stock = 0),
+    Button("Player 1", centerx, startY+padding, () => ()),
+    Button("Start Game", centerx, startY+5*padding, () => SBGame.enterState(mgm.Mode.BattleID)),
+    Button("Back", centerx, startY+6*padding, () => SBGame.enterState(mgm.Mode.MenuID)))
 
   override def render(gc: GameContainer, game: StateBasedGame, g: Graphics) = {
     super.render(gc, game, g)

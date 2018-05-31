@@ -11,8 +11,11 @@ import lib.util.{TickTimer,TimerListener,RepeatForever}
 import scala.math.abs
 
 class Game extends lib.slick2d.game.Game with TimerListener {
+  val respawnDelay = 60*5 // respawn after 5 seconds
+
   val maxPlayers = 4
   var playerList: Array[Player] = null
+  var stock: Array[Double] = null
 
   var platformList: List[Platform] = List()
   var bulletList: List[Bullet] = List()
@@ -42,6 +45,23 @@ class Game extends lib.slick2d.game.Game with TimerListener {
     for (i <- 0 until nplayers) {
       playerList(i) = new Player((0.25f + i) * areaDimension,
        areaDimension.toFloat * (1f + (-0.5f*(i % 2))), players(HumanPlayer), i)
+      playerList(i).onDeath = onDeathCallback _
+    }
+    stock = Array.fill(nplayers)(state.Settings.stock)
+  }
+
+  def respawnPending = respawnTimer.ticking()
+  def canRespawn(player: Player) = stock(player.num) > 0
+  val respawnTimer = new TimerListener{}
+  def respawn(player: Player) = {
+    playerList(player.num) = new Player(0, 0, player.base, player.num)
+    playerList(player.num).onDeath = onDeathCallback _
+    stock(player.num) -= 1
+  }
+  def onDeathCallback(player: Player): Unit = {
+    if (!player.active && canRespawn(player)) {
+      if (player.mostRecentAttacker != -1) state.Battle.score(player.mostRecentAttacker) += 1
+      respawnTimer += new TickTimer(respawnDelay, () => respawn(player))
     }
   }
 
@@ -52,9 +72,9 @@ class Game extends lib.slick2d.game.Game with TimerListener {
     platformList = platformList.filter(_.active)
   }
 
-
   def update(gc: GameContainer, game: StateBasedGame, delta: Int) = {
     super.tick(delta)
+    respawnTimer.tick(delta)
 
     for (bullet <- bulletList.filter(_.active)) {
       // val (dx, dy) = collision(bullet, bullet.xVel.toInt, bullet.yVel.toInt)
@@ -68,15 +88,21 @@ class Game extends lib.slick2d.game.Game with TimerListener {
       }
       for (player <- playerList.filter(_.active)) {
         if (bullet.playerNum != player.num && collision(bullet, player)) {
-          player.takeDamage(1)
-          if (!player.active) {
-            state.Battle.score(bullet.playerNum) += 1
-          }
+          player.takeDamage(bullet)
           bullet.inactivate
         }
       }
     }
 
+    for (player <- playerList) {
+      val alivePlayers = playerList.filter(_.active).length
+      if (alivePlayers <= 1 && ! isGameOver && ! respawnPending) {
+        gameOver()
+        if (winner != maxPlayers) {
+          state.Battle.score(winner) += 1
+        }
+      }
+    }
 
     // var minx: Int = x
     // var miny: Int = y

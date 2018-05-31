@@ -67,14 +67,6 @@ object Battle extends SlickBasicGameState {
     ui.render(gc, sbg, g)
 
     for (player <- game.playerList) {
-      val alivePlayers = game.playerList.filter(_.active).length
-      if (alivePlayers <= 1 && ! game.isGameOver) {
-        game.gameOver()
-        if (game.winner != game.maxPlayers) {
-          score(game.winner) += 1
-        }
-      }
-
       player.draw()
     }
     for (platform <- game.platformList) {
