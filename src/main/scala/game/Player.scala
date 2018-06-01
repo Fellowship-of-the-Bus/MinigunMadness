@@ -114,6 +114,7 @@ class Player(xc: Float, yc: Float, val base: PlayerAttributes, val num: Int) ext
     (v, v)
   }
 
+  // if jetpack is currently active, only need to have enough fuel for consumption, otherwise there is a startup cost
   var prevJetpackActive = false
   def jetpackActive = ((prevJetpackActive && jetpackOn && fuel >= fuelConsumption) || (jetpackOn && fuel >= fuelThreshold))
 
@@ -142,7 +143,7 @@ class Player(xc: Float, yc: Float, val base: PlayerAttributes, val num: Int) ext
     x = clamp(x, 0, Width-width)
     y = max(y, 0)
     if (y > Height)
-      inactivate()
+      inactivate() // fall off the bottom
     if (!onBlock && !jetpackActive) {
       yvel += GravityAcceleration
     } else {
@@ -167,7 +168,8 @@ class Player(xc: Float, yc: Float, val base: PlayerAttributes, val num: Int) ext
       else fuelRecovery
 
     fuel = clamp(fuel+amt, 0, maxFuel)
-    if (jetpackActive) imageIndex = 0
+    imageIndex = if (jetpackActive) 1 else 0
+
     prevJetpackActive = jetpackActive
     image.update(delta)
     if (!onBlock && !jetpackActive) {
