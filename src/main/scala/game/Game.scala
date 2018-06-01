@@ -44,16 +44,6 @@ class Game extends lib.slick2d.game.Game with TimerListener {
   colOffsets(1) = 0f
   colOffsets(3) = 0f
 
-  def setPlayers(nplayers: Int) = {
-    playerList = new Array[Player](nplayers)
-    for (i <- 0 until nplayers) {
-      playerList(i) = new Player((0.25f + i) * areaDimension,
-       areaDimension.toFloat * (1f + (-0.5f*(i % 2))), players(HumanPlayer), i)
-      playerList(i).onDeath = onDeathCallback _
-    }
-    stock = Array.fill(nplayers)(state.Settings.stock)
-  }
-
   val respawnDelay = 60*3 // respawn after 3 seconds
   def respawnPending = respawnTimer.ticking()
   def canRespawn(player: Player) = stock(player.num) > 0
