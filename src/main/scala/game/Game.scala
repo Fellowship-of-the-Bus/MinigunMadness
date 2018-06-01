@@ -11,11 +11,15 @@ import lib.util.{TickTimer,TimerListener,RepeatForever}
 import scala.math.abs
 
 class Game extends lib.slick2d.game.Game with TimerListener {
-  val respawnDelay = 60*5 // respawn after 5 seconds
 
   val maxPlayers = 4
-  var playerList: Array[Player] = null
-  var stock: Array[Double] = null
+  var playerList: Array[Player] = (for {
+    i <- 0 until maxPlayers
+    p = new Player((0.25f + i) * areaDimension,
+      areaDimension.toFloat * (1f + (-0.5f*(i % 2))), players(HumanPlayer), i)
+    _ = p.onDeath = onDeathCallback _
+  } yield p).toArray
+  var stock: Array[Double] = Array.fill(maxPlayers)(state.Settings.stock)
 
   var platformList: List[Platform] = List()
   var bulletList: List[Bullet] = List()
@@ -50,6 +54,7 @@ class Game extends lib.slick2d.game.Game with TimerListener {
     stock = Array.fill(nplayers)(state.Settings.stock)
   }
 
+  val respawnDelay = 60*3 // respawn after 3 seconds
   def respawnPending = respawnTimer.ticking()
   def canRespawn(player: Player) = stock(player.num) > 0
   val respawnTimer = new TimerListener{}
