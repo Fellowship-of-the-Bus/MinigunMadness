@@ -11,5 +11,18 @@
     "fuelThreshold": 240,
     "gunTurnRate": 5,
     "shotGunTurnRate": 1
+  },
+  "AIPlayer": {
+    "maxHp": 20,
+    "attack": 5,
+    "moveSpeed": 5,
+    "shotMoveSpeedPenalty": 0.5,
+    "maxFuel": 600,
+    "jetpackSpeed": 10,
+    "fuelRecovery": 3,
+    "fuelConsumption": 2,
+    "fuelThreshold": 240,
+    "gunTurnRate": 5,
+    "shotGunTurnRate": 1
   }
 }

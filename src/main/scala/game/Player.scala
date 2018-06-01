@@ -18,6 +18,7 @@ import scala.math._
 
 sealed trait PlayerID
 case object HumanPlayer extends PlayerID
+case object AIPlayer extends PlayerID
 case class PlayerAttributes(
   maxHp: Float,
   attack: Float,
@@ -58,7 +59,7 @@ object PlayerAttributes {
 
 object PlayerID {
   implicit object Factory extends IDFactory[PlayerID] {
-    val ids = Vector(HumanPlayer)
+    val ids = Vector(HumanPlayer, AIPlayer)
   }
   implicit lazy val extractor =
     Json.extractor[String].map(Factory.fromString(_))
