@@ -14,5 +14,6 @@
   "Player4Jetpack": "Player4Jetpack.png",
   "Background": "Background.png",
   "Bullet" : "Bullet.png",
-  "Minigun" : "Minigun.png"
+  "Minigun" : "Minigun.png",
+  "SelectArrow": "SelectionArrow.png"
 }
