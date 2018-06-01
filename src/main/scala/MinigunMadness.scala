@@ -40,7 +40,7 @@ object MinigunMadness extends App {
     Native.loadLibraryFromJar()
     val appgc = new AppGameContainer(new MinigunMadness("Minigun Madness"))
     val HeightPercent = 0.9
-    val (w, h) = calculateScreenSize((appgc.getScreenHeight * HeightPercent).toInt, appgc.getScreenWidth)
+    val (w, h) = calculateScreenSize(appgc.getScreenWidth, (appgc.getScreenHeight * HeightPercent).toInt)
     Width = w
     Height = h
     appgc.setDisplayMode(Width, Height, false)
