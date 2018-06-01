@@ -97,7 +97,7 @@ object Battle extends SlickBasicGameState {
     ui = new Pane(0, 0, 0, 0)(Color.white)
     if (controllerInput != null) controllerInput.removeListeners()
     controllerInput = new ControllerInput(game, gc, sbg)
-    ui.addChildren(game.playerList.toList.map(new PlayerHUD(_)))
+    ui.addChildren(game.playerList.toList.map(x => new PlayerHUD(game, x.num)))
     ui.setState(getID)
     ui.resetGame(game)
     ui.init(gc, sbg)
