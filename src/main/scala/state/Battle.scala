@@ -171,38 +171,18 @@ class BattleController(getPlayer: () => Player, g: Game, gc: GameContainer, sbg:
       else 0f
   }
 
-  def turnGun(anglex: Float, angley: Float): Unit = if (canAct()) {
-    // turn gun accoring to new angle
-    if (anglex != 0 || angley != 0) {
-      var angle = toDegrees(atan2(anglex,angley)) - 90
-      if (angle < 0) angle += 360
-
-      val diff = angle - player.gunAngle
-      if (diff > 0 && diff < 180 || diff > -360 && diff < -180) player.gunAngle += player.gunTurnRate
-      else player.gunAngle -= player.gunTurnRate
-      player.gunAngle = (player.gunAngle + 360) % 360
-    }
-  }
-
   // right stick
   override def axis2(anglex: Float, angley: Float): Unit = if (canAct()) {
-    turnGun(anglex, angley)
+    player.turnGun(anglex, angley)
   }
 
   // mouse
   override def axis3(mouseX: Float, mouseY: Float): Unit = if (canAct()) {
-    val xVec = mouseX - player.x
-    val yVec = mouseY - player.y
-
-    val anglex = (xVec / math.sqrt((xVec*xVec) + (yVec*yVec))).toFloat
-    val angley = (yVec / math.sqrt((xVec*xVec) + (yVec*yVec))).toFloat
-    turnGun(anglex, angley)
+    player.turnGunToward(mouseX, mouseY)
   }
 
   override def update(delta: Int): Unit = if (canAct()) {
-    val (minx,miny) = g.collision(player, dx, dy)
-    player.move(minx, miny)
-    player.onBlock = (miny < dy)
+    player.moveBy(g, dx, dy)
     if (player.shooting && player.active) g.bulletList = player.shoot()::g.bulletList
   }
 }

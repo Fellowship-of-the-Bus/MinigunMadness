@@ -172,7 +172,7 @@ class Player(xc: Float, yc: Float, val base: PlayerAttributes, val num: Int) ext
 
     prevJetpackActive = jetpackActive
     image.update(delta)
-    if (!onBlock && !jetpackActive) {
+    if (!onBlock && !jetpackActive) { // gravity
       val (_,miny) = g.collision(this,0,yvel)
       if (miny < yvel) {
         onBlock = true
@@ -192,6 +192,37 @@ class Player(xc: Float, yc: Float, val base: PlayerAttributes, val num: Int) ext
     if (hp <= 0) {
       inactivate
     }
+  }
+
+  /** turn gun by angle between given x/y */
+  def turnGun(anglex: Float, angley: Float): Unit = {
+    // turn gun accoring to new angle
+    if (anglex != 0 || angley != 0) {
+      var angle = toDegrees(atan2(anglex,angley)) - 90
+      if (angle < 0) angle += 360
+
+      val diff = angle - gunAngle
+      if (diff > 0 && diff < 180 || diff > -360 && diff < -180) gunAngle += gunTurnRate
+      else gunAngle -= gunTurnRate
+      gunAngle = (gunAngle + 360) % 360
+    }
+  }
+
+  /** turn gun towards a point relative to the player */
+  def turnGunToward(xc: Float, yc: Float): Unit = {
+    val xVec = xc - x
+    val yVec = yc - y
+
+    val anglex = (xVec / math.sqrt((xVec*xVec) + (yVec*yVec))).toFloat
+    val angley = (yVec / math.sqrt((xVec*xVec) + (yVec*yVec))).toFloat
+    turnGun(anglex, angley)
+  }
+
+  /** try to move by (dx, dy) */
+  def moveBy(g: Game, dx: Float, dy: Float): Unit = {
+    val (minx,miny) = g.collision(this, dx, dy)
+    move(minx, miny)
+    onBlock = (miny < dy)
   }
 
   // callback upon death of character
