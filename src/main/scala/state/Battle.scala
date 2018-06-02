@@ -124,8 +124,18 @@ object Battle extends SlickBasicGameState {
     ui = new Pane(0, 0, 0, 0)(Color.white)
     if (controllerManager != null) controllerManager.removeListeners()
     controllerManager = new ControllerManager(gc, sbg)
+    var nregistered = 0
     for ((ctrl, pnum) <- controllerManager.controllers.zip(0 until game.playerList.length)) {
-      ctrl.controller = new BattleController(() => game.playerList(pnum), game, gc, sbg)
+      def register() = {
+        ctrl.registerControlScheme(new BattleController(() => game.playerList(pnum), game, gc, sbg))
+        nregistered += 1
+      }
+      ctrl match {
+        case _: SlickGamepadController if (Options.gamepadPlayer) => register()
+        case _: SlickKeyboardController if (Options.keyboardPlayer) => register()
+        case _ => () // skip if respective controller type is disabled
+      }
+    }
     }
     ui.addChildren(game.playerList.toList.map(x => new PlayerHUD(game, x.num)))
     ui.setState(getID)

@@ -352,9 +352,8 @@ class ControllerManager(gc: GameContainer, sbg: StateBasedGame)(implicit state: 
         controls = controls :+ new SlickGamepadController(i, input, sbg)
       }
     }
-    if (Options.keyboardPlayer) {
-      controls = controls :+ new SlickKeyboardController(input, sbg)
-    }
+    controls = controls :+ new SlickKeyboardController(input, sbg)
+  }
   }
 
   def update(delta: Int): Unit = {
@@ -380,20 +379,19 @@ trait SlickController {
   protected def removeListener(input: Input): Unit
 
   def setInput(in: Input): Unit = {
-    addListener(in)
-    if (input != null) removeListener(in)
+    if (input != null) removeListener(input)
     input = in
-    if (input != null) addListener(in)
+    if (input != null) addListener(input)
   }
 
   def inputStarted(): Unit = {}
   def inputEnded(): Unit = {}
 
   /** Accepts input only on the current state */
-  def isAcceptingInput(): Boolean = state == sbg.getCurrentStateID
+  def isAcceptingInput(): Boolean = state == sbg.getCurrentStateID && controller != null
 
   protected def mapping: ControllerInput.ControlMapping
-  def update(delta: Int): Unit = {
+  def update(delta: Int): Unit = if (controller != null) {
     for (axis <- mapping) {
       controller.pressed(axis(this))
     }
