@@ -28,6 +28,13 @@ object Battle extends SlickBasicGameState {
 
   val font = new TrueTypeFont(new Font("Verdana", Font.BOLD, 20), true)
 
+  val stockFormat = {
+    import java.text._
+    val symbols = new DecimalFormatSymbols()
+    symbols.setInfinity("Inf")
+    new DecimalFormat("####", symbols)
+  }
+
   val playerColor = Array(
     new Color(255, 0, 0),
     new Color(0, 0, 255),
@@ -88,8 +95,14 @@ object Battle extends SlickBasicGameState {
       bullet.draw(g)
     }
 
+    font.drawString(0, 0, "Score: ", Color.gray)
     for (idx <- 0 until score.length) {
-      font.drawString(idx*Width/4, 0, s"${score(idx)}", playerColor(idx))
+      font.drawString((idx+1)*Width/5, 0, s"${score(idx)}", playerColor(idx))
+    }
+    val y = font.getHeight("Score: 0123456789") // distance between text items
+    font.drawString(0, y, "Stock: ", Color.gray)
+    for (idx <- 0 until score.length) {
+      font.drawString((idx+1)*Width/5, y, s"${stockFormat.format(game.stock(idx))}", playerColor(idx))
     }
 
     if (game.isGameOver) {
