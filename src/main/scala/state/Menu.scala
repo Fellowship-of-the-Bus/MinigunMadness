@@ -35,6 +35,7 @@ trait MenuState extends BasicGameState {
 
   implicit var input: Input = null
   implicit var SBGame: StateBasedGame = null
+  implicit var container: GameContainer = null
   implicit val id = getID
 
   private var currentOption = 0
@@ -50,6 +51,7 @@ trait MenuState extends BasicGameState {
   def init(gc: GameContainer, game: StateBasedGame): Unit = {
     input = gc.getInput
     SBGame = game
+    container = gc
     gc.getGraphics.setBackground(Color.cyan)
 
     import ControllerInput.Implicits.defaultGamepadMapping
@@ -79,7 +81,10 @@ trait MenuState extends BasicGameState {
 
 object Menu extends MenuState {
   lazy val choices = List(
-    Button("New Game (A/X)", centerx, startY, () => SBGame.enterState(Mode.BattleID)),
+    Button("New Game (A/X)", centerx, startY, () => {
+      Battle.reset(container, SBGame)
+      SBGame.enterState(Mode.BattleID)
+    }),
     Button("Options", centerx, startY+padding, () => SBGame.enterState(Mode.OptionsID)),
     Button("Quit (B/O)", centerx, startY+2*padding, () => System.exit(0)))
 
@@ -104,11 +109,21 @@ object Settings extends MenuState {
 object Options extends MenuState {
   var keyboardPlayer = true
   var aiPlayer = true
+  var gamepadPlayer = true
 
-  lazy val choices = List(
-    ToggleButton("Toggle Keyboard Player", centerx, startY, () => keyboardPlayer = !keyboardPlayer, () => keyboardPlayer),
-    ToggleButton("Toggle AI Player(s)", centerx, startY+padding, () => aiPlayer = !aiPlayer, () => aiPlayer),
-    Button("Back", centerx, startY+2*padding, () => SBGame.enterState(Mode.MenuID)))
+  lazy val choices = {
+    val otherButtons = List(
+      ToggleButton("Toggle Keyboard Player", centerx, startY, () => keyboardPlayer = !keyboardPlayer, () => keyboardPlayer),
+      ToggleButton("Toggle AI Players", centerx, startY+padding, () => aiPlayer = !aiPlayer, () => aiPlayer),
+      ToggleButton("Toggle Gamepad Players", centerx, startY+2*padding, () => gamepadPlayer = !gamepadPlayer, () => gamepadPlayer),
+    )
+    otherButtons ++
+      List(
+        ToggleButton("Show FPS", centerx, startY+3*padding, () => container.setShowFPS(! container.isShowingFPS), () => container.isShowingFPS),
+        Button("Back", centerx, startY+4*padding, () => SBGame.enterState(Mode.MenuID))
+          .setSelectable(() => otherButtons.exists(_.on)),
+      )
+  }
 
   def getID() = Mode.OptionsID
 }

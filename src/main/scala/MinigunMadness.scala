@@ -11,7 +11,7 @@ import lib.game.GameConfig
 
 class MinigunMadness(gamename: String) extends StateBasedGame(gamename) {
   def initStatesList(gc: GameContainer) = {
-    gc.setShowFPS(true)
+    gc.setShowFPS(false)
     addState(Menu)
     addState(Battle)
     addState(Settings)
