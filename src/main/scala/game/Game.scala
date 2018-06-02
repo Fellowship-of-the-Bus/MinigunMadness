@@ -8,9 +8,9 @@ import org.newdawn.slick.geom.{Polygon, Transform}
 import lib.game.GameConfig.{Height,Width}
 import lib.util.rand
 import lib.util.{TickTimer,TimerListener,RepeatForever}
-import scala.math.abs
+import scala.math.{abs, max}
 
-class Game extends lib.slick2d.game.Game with TimerListener {
+class Game(val maxScore: Double) extends lib.slick2d.game.Game with TimerListener {
 
   val maxPlayers = 4
   var playerList: Array[Player] = (for {
@@ -20,6 +20,8 @@ class Game extends lib.slick2d.game.Game with TimerListener {
     _ = p.onDeath = onDeathCallback _
   } yield p).toArray
   var stock: Array[Double] = Array.fill(maxPlayers)(state.Settings.stock)
+  var score: Array[Int] = Array.fill(maxPlayers)(0)
+  var currentScore = 0
 
   var platformList: List[Platform] = List()
   var bulletList: List[Bullet] = List()
@@ -51,11 +53,16 @@ class Game extends lib.slick2d.game.Game with TimerListener {
   def respawn(player: Player) = {
     playerList(player.num) = new Player(0, 0, player.base, player.num)
     playerList(player.num).onDeath = onDeathCallback _
-    stock(player.num) -= 1
   }
   def onDeathCallback(player: Player): Unit = {
+    stock(player.num) -= 1
+    if (player.mostRecentAttacker != -1) {
+      // update score counter for attacker and currentScore if attacker
+      // is the one with the highest score
+      score(player.mostRecentAttacker) += 1
+      currentScore = max(currentScore, score(player.mostRecentAttacker))
+    }
     if (!player.active && canRespawn(player)) {
-      if (player.mostRecentAttacker != -1) state.Battle.score(player.mostRecentAttacker) += 1
       respawnTimer += new TickTimer(respawnDelay, () => respawn(player))
     }
   }
@@ -91,11 +98,8 @@ class Game extends lib.slick2d.game.Game with TimerListener {
 
     for (player <- playerList) {
       val alivePlayers = playerList.filter(_.active).length
-      if (alivePlayers <= 1 && ! isGameOver && ! respawnPending) {
+      if (! isGameOver && ((alivePlayers <= 1 && ! respawnPending) || currentScore >= maxScore)) {
         gameOver()
-        if (winner != maxPlayers) {
-          state.Battle.score(winner) += 1
-        }
       }
     }
 
@@ -161,12 +165,14 @@ class Game extends lib.slick2d.game.Game with TimerListener {
     // return go1.mesh.intersects(go2NormalizedMesh)
   }
 
-  var winner = -1
+  var winner = Array[Player]()
   override def gameOver() = {
     super.gameOver()
     for (p <- playerList; if (p.active)) {
-      winner = p.num
+      // gain a point for surviving until the end
+      score(p.num) += 1
     }
-    if (winner == -1) winner = maxPlayers
+    currentScore = score.max
+    winner = playerList.filter(p => score(p.num) >= currentScore)
   }
 }

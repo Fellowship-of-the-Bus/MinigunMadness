@@ -44,8 +44,6 @@ object Battle extends SlickBasicGameState {
   )
   val tint = new Color(255, 255, 255, (0.5 * 255).asInstanceOf[Int])
 
-  var score = Array[Int]()
-
   var ui: Pane = null
 
   var controllerManager: ControllerManager = null
@@ -96,31 +94,32 @@ object Battle extends SlickBasicGameState {
     }
 
     font.drawString(0, 0, "Score: ", Color.gray)
-    for (idx <- 0 until score.length) {
-      font.drawString((idx+1)*Width/5, 0, s"${score(idx)}", playerColor(idx))
+    for (idx <- 0 until game.score.length) {
+      font.drawString((idx+1)*Width/5, 0, s"${game.score(idx)}", playerColor(idx))
     }
     val y = font.getHeight("Score: 0123456789") // distance between text items
     font.drawString(0, y, "Stock: ", Color.gray)
-    for (idx <- 0 until score.length) {
+    for (idx <- 0 until game.score.length) {
       font.drawString((idx+1)*Width/5, y, s"${stockFormat.format(game.stock(idx))}", playerColor(idx))
     }
 
     if (game.isGameOver) {
-      g.setColor(playerColor(game.winner).multiply(tint))
-      g.fillRect(0, 0, Width, Height)
-      // images(GameOverID).draw(0,0)
+      val width = Width/game.winner.length
+      for ((p, idx) <- game.winner.zipWithIndex) {
+        g.setColor(playerColor(p.num).multiply(tint))
+        g.fillRect(idx*width, 0, width, Height)
+      }
     }
   }
 
   import ControllerInput.Implicits.defaultKeyboardMapping
   def init(gc: GameContainer, sbg: StateBasedGame) = {
     reset(gc, sbg)
-    score = new Array[Int](game.playerList.length)
   }
 
   def reset(gc: GameContainer, sbg: StateBasedGame) = {
     implicit val id = getID()
-    game = new Game
+    game = new Game(Settings.maxScore)
     ui = new Pane(0, 0, 0, 0)(Color.white)
     if (controllerManager != null) controllerManager.removeListeners()
     controllerManager = new ControllerManager(gc, sbg)
@@ -131,6 +130,7 @@ object Battle extends SlickBasicGameState {
         nregistered += 1
       }
       ctrl match {
+        // consume N controllers of the right kind (only enabled types) and assign a player to the controller
         case _: SlickGamepadController if (Options.gamepadPlayer) => register()
         case _: SlickKeyboardController if (Options.keyboardPlayer) => register()
         case _ => () // skip if respective controller type is disabled

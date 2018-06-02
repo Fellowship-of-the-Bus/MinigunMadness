@@ -81,27 +81,46 @@ trait MenuState extends BasicGameState {
 
 object Menu extends MenuState {
   lazy val choices = List(
-    Button("New Game (A/X)", centerx, startY, () => {
-      Battle.reset(container, SBGame)
-      SBGame.enterState(Mode.BattleID)
-    }),
+    Button("New Game", centerx, startY, () => SBGame.enterState(Mode.SettingsID)),
     Button("Options", centerx, startY+padding, () => SBGame.enterState(Mode.OptionsID)),
-    Button("Quit (B/O)", centerx, startY+2*padding, () => System.exit(0)))
+    Button("Quit", centerx, startY+2*padding, () => System.exit(0)))
 
   def getID() = Mode.MenuID
 }
 
 // pre-battle settings screen to toggle options
 object Settings extends MenuState {
-  var doRespawn = true
-  var maxScore  = 99
+  var maxScore = Double.PositiveInfinity
   var stock = Double.PositiveInfinity
 
-  lazy val choices = List(
-    Button("Respawn Mode: ", centerx, startY, () => stock = 0),
-    Button("Player 1", centerx, startY+padding, () => ()),
-    Button("Start Game", centerx, startY+5*padding, () => SBGame.enterState(mgm.Mode.BattleID)),
-    Button("Back", centerx, startY+6*padding, () => SBGame.enterState(mgm.Mode.MenuID)))
+  def setting(maxScore: Double = Double.PositiveInfinity, stock: Double = Double.PositiveInfinity): Unit = {
+    this.maxScore = maxScore
+    this.stock = stock
+    Battle.reset(container, SBGame)
+    SBGame.enterState(Mode.BattleID)
+  }
+
+  lazy val choices = {
+    var buttons = List[Button]()
+    var currentY = startY
+    def makeButton(text: String, action: () => Unit): Unit = {
+      buttons = buttons :+ Button(text, centerx, currentY, action)
+      currentY += padding
+    }
+    makeButton("1 stock", () => setting(stock = 1))
+    makeButton("3 stock", () => setting(stock = 3))
+    makeButton("5 stock", () => setting(stock = 5))
+    makeButton("10 stock", () => setting(stock = 10))
+    makeButton("30 stock", () => setting(stock = 30))
+    makeButton("99 stock", () => setting(stock = 99))
+
+    makeButton("First to 5 points", () => setting(maxScore = 5))
+    makeButton("First to 10 points", () => setting(maxScore = 10))
+    makeButton("First to 30 points", () => setting(maxScore = 30))
+    makeButton("First to 99 points", () => setting(maxScore = 99))
+    makeButton("Back", () => SBGame.enterState(mgm.Mode.MenuID))
+    buttons
+  }
 
   def getID() = Mode.SettingsID
 }
