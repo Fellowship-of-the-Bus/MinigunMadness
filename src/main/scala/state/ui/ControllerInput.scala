@@ -354,6 +354,11 @@ class ControllerManager(gc: GameContainer, sbg: StateBasedGame)(implicit state: 
     }
     controls = controls :+ new SlickKeyboardController(input, sbg)
   }
+
+  def addAI(ai: AI): Unit = {
+    val aiController = new SlickAIController(gc, sbg)
+    aiController.registerControlScheme(ai)
+    controls = controls :+ aiController
   }
 
   def update(delta: Int): Unit = {
@@ -505,6 +510,19 @@ class SlickKeyboardController(protected var input: Input, val sbg: StateBasedGam
   def getAxisValue(axis: Int): (Float, Float) = (input.getMouseX.toFloat, input.getMouseY.toFloat)
 }
 
+class SlickAIController(gc: GameContainer, val sbg: StateBasedGame)(implicit val state: Int) extends SlickController {
+  protected def input: Input = null
+  protected def input_=(in: Input) = {}
+  protected def addListener(input: Input): Unit = {}
+  protected def removeListener(input: Input): Unit = {}
+  override def update(delta: Int): Unit = if (! gc.isPaused) {
+    // this is just a simple wrapper, forward to AI update
+    controller.update(delta)
+  }
+  def getAxisValue(axis: Int): (Float, Float) = (0, 0)
+  protected def mapping: ControllerInput.ControlMapping = null
+}
+
 /** a single controller - provides a much nicer interface to work with */
 trait Controller {
   import ControllerInput._
@@ -586,3 +604,6 @@ trait Controller {
   def pausePressed(): Unit = {}
   def backPressed(): Unit = {}
 }
+
+// tag trait for AI
+trait AI extends Controller
