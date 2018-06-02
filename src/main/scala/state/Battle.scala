@@ -136,6 +136,14 @@ object Battle extends SlickBasicGameState {
         case _ => () // skip if respective controller type is disabled
       }
     }
+    for (pnum <- nregistered until game.maxPlayers) {
+      if (Options.aiPlayer) {
+        controllerManager.addAI(new TrainingDummy(() => game.playerList(pnum), game))
+      } else {
+        // AI players are off, kill extra players early
+        game.stock(pnum) = 0
+        game.playerList(pnum).inactivate
+      }
     }
     ui.addChildren(game.playerList.toList.map(x => new PlayerHUD(game, x.num)))
     ui.setState(getID)
