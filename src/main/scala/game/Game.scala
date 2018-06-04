@@ -15,8 +15,7 @@ class Game(val maxScore: Double) extends lib.slick2d.game.Game with TimerListene
   val maxPlayers = 4
   var playerList: Array[Player] = (for {
     i <- 0 until maxPlayers
-    p = new Player((0.25f + i) * areaDimension,
-      areaDimension.toFloat * (1f + (-0.5f*(i % 2))), players(HumanPlayer), i)
+    p = new Player(0, 0, players(HumanPlayer), i)
     _ = p.onDeath = onDeathCallback _
   } yield p).toArray
   var stock: Array[Double] = Array.fill(maxPlayers)(state.Settings.stock)
@@ -46,12 +45,36 @@ class Game(val maxScore: Double) extends lib.slick2d.game.Game with TimerListene
   colOffsets(1) = 0f
   colOffsets(3) = 0f
 
+  def setRespawnLocation(player: Player): Unit = {
+    val xval = player.num * areaDimension
+    var highestVal = Height.toFloat
+    var highestPlat: Platform = null
+    // filter out platforms not in the correct column
+    for (platform <- platformList; if (platform.x >= xval-0.005 && platform.x <= xval+0.005)) {
+      if (platform.y < highestVal) {
+        highestVal = platform.y
+        highestPlat = platform
+      }
+    }
+    if (highestPlat != null) {
+      player.x = (0.25f + player.num) * areaDimension
+      val (_, y) = highestPlat.topLeftCoord()
+      player.y = highestPlat.y + highestPlat.height
+    }
+  }
+
+  for (p <- playerList) {
+    p.x = (0.25f + p.num) * areaDimension
+    p.y = areaDimension.toFloat * (1f + (-0.5f*(p.num % 2)))
+  }
+
   val respawnDelay = 60*3 // respawn after 3 seconds
   def respawnPending = respawnTimer.ticking()
   def canRespawn(player: Player) = stock(player.num) > 0
   val respawnTimer = new TimerListener{}
   def respawn(player: Player) = {
     playerList(player.num) = new Player(0, 0, player.base, player.num)
+    setRespawnLocation(playerList(player.num))
     playerList(player.num).onDeath = onDeathCallback _
   }
   def onDeathCallback(player: Player): Unit = {
