@@ -48,7 +48,8 @@ This game supports multiplayer for up to 4 players using controllers, with one p
 ### Art
 * Abraham Dubrisingh, using [SumoPaint](https://www.sumopaint.com/)
 
-<!-- ### Special Thanks -->
+### Special Thanks
+* [Egyptian Nights](http://www.fontspace.com/jonathan-s-harris/egyptian-nights) font created by Jonathan S. Harris
 <!-- * This game was heavily inspired by games such as  and other classic shoot 'em ups -->
 
 [Rob Schluntz]: https://github.com/saitou1024
