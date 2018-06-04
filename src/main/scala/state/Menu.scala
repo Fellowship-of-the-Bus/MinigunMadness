@@ -15,13 +15,13 @@ import org.newdawn.slick.state.{BasicGameState, StateBasedGame}
 object MenuState {
   val background = images(Background)
   val fotb = images(FotBLogo)
-  // val logo = images(Logo)
+  val logo = images(GameLogo)
   val arrow = images(SelectArrow)
 
   background.scaleFactor = Width/background.width
   fotb.scaleFactor = 1
   arrow.scaleFactor = Button.height/arrow.height
-  // logo.scaleFactor = 1
+  logo.scaleFactor = 4*Button.height/logo.height
   implicit val keyMap: ControllerInput.KeyboardMapping =
     ControllerInput.Implicits.defaultKeyboardMapping + ((Input.KEY_ENTER -> ControllerInput.Action1))
 }
@@ -29,9 +29,9 @@ object MenuState {
 trait MenuState extends BasicGameState {
   import MenuState._
 
-  val startY = 200 // Height/2
+  val startY = Height*2/7
   val centerx = Width/2-Button.width/2
-  val padding = 30
+  val padding = Button.height*3/2
 
   implicit var input: Input = null
   implicit var SBGame: StateBasedGame = null
@@ -64,7 +64,7 @@ trait MenuState extends BasicGameState {
   def render(gc: GameContainer, game: StateBasedGame, g: Graphics) = {
     background.draw(0,0)
     fotb.draw(Width/2-fotb.getWidth/2, 3*Height/4)
-    // logo.draw(Width/2-logo.getWidth/2, 200)
+    logo.draw(Width/2-logo.getWidth/2, Height/8)
 
     for (item <- choices) {
       item.render(gc, game, g)

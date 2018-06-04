@@ -34,13 +34,14 @@ case object Background extends ImageID
 case object Bullet extends ImageID
 case object Minigun extends ImageID
 case object SelectArrow extends ImageID
+case object GameLogo extends ImageID
 
 object ImageID {
   implicit object Factory extends IDFactory[ImageID] {
 
     val ids = Vector(FotBLogo, Logo, IBlock, JBlock, LBlock, TBlock,
      Player1Walk, Player1Jetpack, Player2Walk, Player2Jetpack, Player3Walk, Player3Jetpack, Player4Walk, Player4Jetpack,
-     Background, Bullet, Minigun, SelectArrow)// GameOver, Heart, TopBorder, Background)
+     Background, Bullet, Minigun, SelectArrow, GameLogo)// GameOver, Heart, TopBorder, Background)
   }
   implicit lazy val extractor =
     Json.extractor[String].map(Factory.fromString(_))

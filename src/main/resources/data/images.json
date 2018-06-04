@@ -15,5 +15,6 @@
   "Background": "Background.png",
   "Bullet" : "Bullet.png",
   "Minigun" : "Minigun.png",
-  "SelectArrow": "SelectionArrow.png"
+  "SelectArrow": "SelectionArrow.png",
+  "GameLogo": "GameLogo.png"
 }
