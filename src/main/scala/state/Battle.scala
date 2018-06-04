@@ -77,6 +77,7 @@ object Battle extends SlickBasicGameState {
       ui.update(gc, sbg, delta)
     }
   }
+
   val background = images(Background)
   background.scaleFactor = Width/ background.width
   def render(gc: GameContainer, sbg: StateBasedGame, g: Graphics) = {
@@ -194,12 +195,8 @@ class BattleController(getPlayer: () => Player, g: Game, gc: GameContainer, sbg:
   var dx = 0f
   var dy = 0f
   override def axis1(x: Float, y: Float): Unit = if (canAct()) {
-    // move player according to
-    val (xvel, yvel) = player.velocity
-    dx = (xvel * x)
-    dy =
-      if (player.jetpackActive) (yvel * y)
-      else 0f
+    dx = x
+    dy = y
   }
 
   // right stick

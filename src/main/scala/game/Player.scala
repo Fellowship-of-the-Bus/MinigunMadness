@@ -218,8 +218,15 @@ class Player(xc: Float, yc: Float, val base: PlayerAttributes, val num: Int) ext
     turnGun(anglex, angley)
   }
 
-  /** try to move by (dx, dy) */
-  def moveBy(g: Game, dx: Float, dy: Float): Unit = {
+  /** try to move by magnitude (mx, my) */
+  def moveBy(g: Game, mx: Float, my: Float): Unit = {
+    // move player according to
+    val (xvel, yvel) = velocity
+    val dx = (xvel * mx)
+    val dy =
+      if (jetpackActive) (yvel * my)
+      else 0f
+
     val (minx,miny) = g.collision(this, dx, dy)
     move(minx, miny)
     onBlock = (miny < dy)

@@ -140,7 +140,7 @@ object Options extends MenuState {
       List(
         ToggleButton("Show FPS", centerx, startY+3*padding, () => container.setShowFPS(! container.isShowingFPS), () => container.isShowingFPS),
         Button("Back", centerx, startY+4*padding, () => SBGame.enterState(Mode.MenuID))
-          .setSelectable(() => otherButtons.exists(_.on)),
+          .setSelectable(() => otherButtons.exists(_.on)), // prevent leaving the options menu with no players
       )
   }
 
