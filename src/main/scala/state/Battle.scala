@@ -79,7 +79,6 @@ object Battle extends SlickBasicGameState {
   }
 
   val background = images(Background)
-  background.scaleFactor = Width/ background.width
   def render(gc: GameContainer, sbg: StateBasedGame, g: Graphics) = {
     background.draw(0,0)
     ui.render(gc, sbg, g)
@@ -94,12 +93,12 @@ object Battle extends SlickBasicGameState {
       bullet.draw(g)
     }
 
-    font.drawString(0, 0, "Score: ", Color.gray)
+    font.drawString(0, 0, "Score: ", Color.lightGray)
     for (idx <- 0 until game.score.length) {
       font.drawString((idx+1)*Width/5, 0, s"${game.score(idx)}", playerColor(idx))
     }
     val y = font.getHeight("Score: 0123456789") // distance between text items
-    font.drawString(0, y, "Stock: ", Color.gray)
+    font.drawString(0, y, "Stock: ", Color.lightGray)
     for (idx <- 0 until game.score.length) {
       font.drawString((idx+1)*Width/5, y, s"${stockFormat.format(game.stock(idx))}", playerColor(idx))
     }
