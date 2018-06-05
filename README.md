@@ -33,6 +33,8 @@ The game takes place in a constantly changing arena, with platforms continuously
 
 There are two different modes of playing: stock and score. In a stock match, each player has a set number of lives. Stock matches have the option of 1, 3, 5, 10, 30, or 99 stock. In a score match, each player has unlimited lives, and competes to reach a target score. Score matches have the option of 5, 10, 30, or 99 target points. After dying, a player's stock is decreased by 1 and they are respawned after 3 seconds if they have remaining lives.
 
+[Intense multiplayer player action!][action]
+
 Each time a player dies, the score of the last player to damage them increases by 1. If a player is alive at the end of the game, their score increases by 1.
 
 This game supports multiplayer for up to 4 players using controllers, with one player able to use a mouse and keyboard. The game also supports a very basic AI player for any unoccupied slots. Minigun Madness is best played with a group of 3 friends for hectic "versus" action.
@@ -59,8 +61,8 @@ This game supports multiplayer for up to 4 players using controllers, with one p
 [Erin Blackmere]: https://github.com/erin2kb
 [Travis Bartlett]: https://github.com/kjifs
 
-[screenshot]: images/screenshot.png
-[video]: http://www.youtube.com/watch?v=AbDVLvt-qY8
+[screenshot]: images/action.png
+[video]: https://www.youtube.com/watch?v=AbDVLvt-qY8
 [video image]: images/video.png
 
 [logo]: src/main/resources/img/FotB-Logo.png
