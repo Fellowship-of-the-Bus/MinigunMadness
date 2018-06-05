@@ -1,4 +1,5 @@
-# Minigun Madness
+![Minigun Madness][game logo]
+
 This game was originally created for the University of Waterloo Games Institute Jam (Winter 2016)
 
 ![Fellowship of the Bus][logo]
@@ -65,6 +66,7 @@ This game supports multiplayer for up to 4 players using controllers, with one p
 [video]: https://www.youtube.com/watch?v=AbDVLvt-qY8
 [video image]: images/video.png
 
+[game logo]: src/main/resources/img/GameLogo.png
 [logo]: src/main/resources/img/FotB-Logo.png
 [releases]: ../../releases
 [sbt]: http://www.scala-sbt.org/
