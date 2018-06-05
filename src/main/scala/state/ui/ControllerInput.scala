@@ -463,7 +463,7 @@ class SlickGamepadController(cnum: Int, protected var input: Input, val sbg: Sta
     else (input.getAxisValue(cnum, RIGHT_AXIS_X), input.getAxisValue(cnum, RIGHT_AXIS_Y))
   }
 
-  override def toString(): String = s"Gamepad Controller $cnum"
+  override def toString(): String = s"Gamepad Controller $cnum: $controller"
 }
 
 class SlickKeyboardController(protected var input: Input, val sbg: StateBasedGame)(implicit val state: Int, protected val mapping: ControllerInput.KeyboardMapping) extends SlickController with KeyListener with MouseListener {
@@ -511,7 +511,7 @@ class SlickKeyboardController(protected var input: Input, val sbg: StateBasedGam
 
   def getAxisValue(axis: Int): (Float, Float) = (input.getMouseX.toFloat, input.getMouseY.toFloat)
 
-  override def toString(): String = s"Keyboard Controller"
+  override def toString(): String = s"Keyboard Controller: $controller"
 }
 
 class SlickAIController(gc: GameContainer, val sbg: StateBasedGame)(implicit val state: Int) extends SlickController {
@@ -526,7 +526,7 @@ class SlickAIController(gc: GameContainer, val sbg: StateBasedGame)(implicit val
   def getAxisValue(axis: Int): (Float, Float) = (0, 0)
   protected def mapping: ControllerInput.ControlMapping = null
 
-  override def toString(): String = s"AI Controller"
+  override def toString(): String = s"AI Controller: $controller"
 }
 
 /** a single controller - provides a much nicer interface to work with */

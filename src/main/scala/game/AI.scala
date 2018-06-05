@@ -110,4 +110,6 @@ class TrainingDummy(getPlayer: () => Player, g: Game) extends AI {
       player.moveBy(g, mx, my)
     }
   }
+
+  override def toString() = s"Training Dummy for player ${player.num}"
 }

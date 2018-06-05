@@ -212,4 +212,8 @@ class BattleController(getPlayer: () => Player, g: Game, gc: GameContainer, sbg:
     player.moveBy(g, dx, dy)
     if (player.shooting && player.active) g.bulletList = player.shoot()::g.bulletList
   }
+
+  override def toString() =
+    if (player != null) s"Battle Controller for Player ${player.num}"
+    else s"Unassigned Battle Controller"
 }
