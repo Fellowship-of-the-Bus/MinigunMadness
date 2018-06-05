@@ -46,6 +46,7 @@ trait MenuState extends BasicGameState {
   def confirm(): Unit = choices(currentOption).doAction()
   def next(): Unit = currentOption = (currentOption+1)%choices.length
   def previous(): Unit = currentOption = (currentOption+choices.length-1)%choices.length
+  def back(): Unit
 
   private var manager: ControllerManager = null
   def init(gc: GameContainer, game: StateBasedGame): Unit = {
@@ -85,6 +86,8 @@ object Menu extends MenuState {
     Button("Options", centerx, startY+padding, () => SBGame.enterState(Mode.OptionsID)),
     Button("Quit", centerx, startY+2*padding, () => System.exit(0)))
 
+  def back(): Unit = ()
+
   def getID() = Mode.MenuID
 }
 
@@ -118,11 +121,12 @@ object Settings extends MenuState {
     makeButton("First to 10 points", () => setting(maxScore = 10))
     makeButton("First to 30 points", () => setting(maxScore = 30))
     makeButton("First to 99 points", () => setting(maxScore = 99))
-    makeButton("Back", () => SBGame.enterState(mgm.Mode.MenuID))
+    makeButton("Back", () => back())
     buttons
   }
 
   def getID() = Mode.SettingsID
+  def back(): Unit = SBGame.enterState(mgm.Mode.MenuID)
 }
 
 object Options extends MenuState {
@@ -139,12 +143,13 @@ object Options extends MenuState {
     otherButtons ++
       List(
         ToggleButton("Show FPS", centerx, startY+3*padding, () => container.setShowFPS(! container.isShowingFPS), () => container.isShowingFPS),
-        Button("Back", centerx, startY+4*padding, () => SBGame.enterState(Mode.MenuID))
+        Button("Back", centerx, startY+4*padding, () => back)
           .setSelectable(() => otherButtons.exists(_.on)), // prevent leaving the options menu with no players
       )
   }
 
   def getID() = Mode.OptionsID
+  def back(): Unit = SBGame.enterState(mgm.Mode.MenuID)
 }
 
 class MenuController(state: MenuState) extends Controller {
@@ -176,4 +181,6 @@ class MenuController(state: MenuState) extends Controller {
   }
 
   override def button1Pressed(): Unit = state.confirm()
+
+  override def backPressed(): Unit = state.back()
 }
