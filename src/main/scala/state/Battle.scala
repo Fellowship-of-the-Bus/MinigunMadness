@@ -124,16 +124,20 @@ object Battle extends SlickBasicGameState {
     if (controllerManager != null) controllerManager.removeListeners()
     controllerManager = new ControllerManager(gc, sbg)
     var nregistered = 0
-    for ((ctrl, pnum) <- controllerManager.controllers.zip(0 until game.playerList.length)) {
-      def register() = {
-        ctrl.registerControlScheme(new BattleController(() => game.playerList(pnum), game, gc, sbg))
-        nregistered += 1
+    for (ctrl <- controllerManager.controllers) {
+      def register(pnum: Int) = {
+        if (pnum != -1){
+          ctrl.registerControlScheme(new BattleController(() => game.playerList(pnum), game, gc, sbg))
+          nregistered += 1
+        } else {
+          ctrl.registerControlScheme(new BattleController(() => null, game, gc, sbg))
+        }
       }
       ctrl match {
         // consume N controllers of the right kind (only enabled types) and assign a player to the controller
-        case _: SlickGamepadController if (Options.gamepadPlayer) => register()
-        case _: SlickKeyboardController if (Options.keyboardPlayer) => register()
-        case _ => () // skip if respective controller type is disabled
+        case _: SlickGamepadController if (Options.gamepadPlayer) => register(nregistered)
+        case _: SlickKeyboardController if (Options.keyboardPlayer) => register(nregistered)
+        case _ => register(-1) // register to -1 if respective controller type is disabled; still want controller to be able to pause and go back
       }
     }
     for (pnum <- nregistered until game.maxPlayers) {
@@ -159,7 +163,7 @@ class BattleController(getPlayer: () => Player, g: Game, gc: GameContainer, sbg:
 
   override def pausePressed(): Unit = gc.setPaused(!gc.isPaused)
 
-  def canAct(): Boolean = player.active && ! gc.isPaused
+  def canAct(): Boolean = player != null && player.active && ! gc.isPaused
 
   def startJetpack(): Unit = if (canAct()) {
     player.jetpackOn = true
@@ -210,7 +214,7 @@ class BattleController(getPlayer: () => Player, g: Game, gc: GameContainer, sbg:
 
   override def update(delta: Int): Unit = if (canAct()) {
     player.moveBy(g, dx, dy)
-    if (player.shooting && player.active) g.bulletList = player.shoot()::g.bulletList
+    if (player.shooting) g.bulletList = player.shoot()::g.bulletList
   }
 
   override def toString() =
