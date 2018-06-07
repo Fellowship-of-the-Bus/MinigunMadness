@@ -28,7 +28,7 @@ Minigun Madness is an arena-style competitive shoot 'em up game. The theme of th
 
 You play as one of four minigun-wielding combatants, and your goal is to get the highest score. Each player comes equipped with a jetpack, allowing faster, unconstrained movement as long as there is remaining fuel. While shooting, your gun turns more slowly, so constantly holding the fire button is rarely an effective strategy.
 
-The game takes place in a constantly changing arena, with platforms continuously moving down the screen towards the pit of doom. If a player falls off the bottom of the screen into the pit, they die. Each player has a set amount of health, which is depleted by taking hits from other players' bullets.
+The game takes place in a constantly changing arena, with platforms continuously moving down the screen towards the pit of doom. If a player falls off the bottom of the screen into the pit, they die. Each player has a set amount of health, which is depleted by taking hits from other players' bullets. Displayed above each player's head is a health bar and a fuel bar.
 
 [![video image]][video]
 
